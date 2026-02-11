@@ -4,93 +4,431 @@
 <meta charset="UTF-8">
 <title>UNEB Analytics System</title>
 
+<script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+
 <style>
+
+:root{
+  --primary:#0f172a;
+  --accent:#2563eb;
+  --light:#f1f5f9;
+}
+
 body{
+  font-family:"Segoe UI",Arial,sans-serif;
+  margin:0;
+  background:var(--light);
+}
+
+/* LOGIN */
+#loginBox{
+  height:100vh;
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  background:linear-gradient(135deg,#1e293b,#0f172a);
+}
+
+.login-card{
+  background:white;
+  padding:30px;
+  border-radius:12px;
+  width:320px;
+  text-align:center;
+  box-shadow:0 10px 25px rgba(0,0,0,0.3);
+}
+
+.login-card input{
+  width:90%;
+  padding:8px;
+  margin:8px 0;
+  border-radius:6px;
+  border:1px solid #cbd5e1;
+}
+
+button{
+  padding:8px 14px;
+  border:none;
+  border-radius:6px;
+  background:var(--accent);
+  color:white;
+  font-weight:600;
+  cursor:pointer;
+}
+
+/* APP */
+#app{ display:none; padding:20px; }
+
+input{
+  padding:6px;
+  margin:4px;
+  border-radius:6px;
+  border:1px solid #cbd5e1;
+}
+
+/* PAGE SECTION */
+.report-page{
+  background:white;
+  padding:20px;
+  margin-bottom:30px;
+  position:relative;
+  min-height:90vh;
+  box-shadow:0 5px 20px rgba(0,0,0,0.1);
+}
+
+/* HEADER */
+.report-header{
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  position:relative;
+  margin-bottom:10px;
+}
+
+.logo-container{
+  position:absolute;
+  left:0;
+}
+
+.logo-container img{
+  height:70px;
+}
+
+.school-info{
+  text-align:center;
+}
+
+.school-info h2{ margin:0; font-size:22px; }
+.school-info h3{ margin:0; font-size:15px; color:#475569; }
+
+/* TABLE */
+table{
+  width:100%;
+  border-collapse:collapse;
+  font-size:10px;
+}
+
+th{
+  background:var(--primary);
+  color:white;
+  padding:4px;
+}
+
+td{
+  padding:3px;
+  text-align:center;
+}
+
+th,td{ border:1px solid #cbd5e1; }
+
+tr:nth-child(even){ background:#f8fafc; }
+
+tfoot td{
+  font-weight:bold;
+  background:#e2e8f0;
+}
+
+/* SIGNATURE */
+.signature{
+  position:absolute;
+  bottom:20px;
+  left:20px;
+  font-size:11px;
+}
+
+/* PAGE BREAK */
+.page-break{
+  page-break-after:always;
+}
+
+/* PRINT */
+@page{
+  size:A4 landscape;
+  margin:10mm;
+}
+
+@media print{
+
+  button,input{ display:none; }
+
+  .report-page{
+    box-shadow:none;
     margin:0;
-    font-family:Arial, sans-serif;
+  }
+
+  table{ font-size:9px; }
+
+  .page-break{
+    page-break-after:always;
+  }
+
+  *{ page-break-inside:avoid !important; }
 }
 
-/* LOGIN SCREEN */
-#loginScreen{
-    height:100vh;
-    display:flex;
-    justify-content:center;
-    align-items:center;
-    background:#0f172a;
-}
-
-.loginBox{
-    background:white;
-    padding:30px;
-    width:320px;
-    border-radius:8px;
-    text-align:center;
-}
-
-.loginBox input{
-    width:100%;
-    padding:10px;
-    margin:8px 0;
-}
-
-.loginBox button{
-    width:100%;
-    padding:10px;
-    background:#2563eb;
-    color:white;
-    border:none;
-    cursor:pointer;
-}
-
-/* MAIN APP */
-#mainApp{
-    display:none;
-    padding:30px;
-}
 </style>
 </head>
 <body>
 
-<div id="loginScreen">
-    <div class="loginBox">
-        <h2>UNEB Login</h2>
-        <input type="text" id="username" placeholder="Username">
-        <input type="password" id="password" placeholder="Password">
-        <button id="loginBtn">Login</button>
-        <p id="errorMsg" style="color:red;"></p>
-    </div>
+<!-- LOGIN -->
+<div id="loginBox">
+  <div class="login-card">
+    <h2>UNEB Analytics Login</h2>
+    <input id="username" placeholder="Username"><br>
+    <input id="password" type="password" placeholder="Password"><br>
+    <button onclick="login()">Login</button>
+    <p id="loginError" style="color:red;"></p>
+  </div>
 </div>
 
-<div id="mainApp">
-    <h1>Login Successful ✅</h1>
-    <p>Your system is working.</p>
+<div id="app">
+
+<input id="schoolName" placeholder="School Name">
+<input id="year" placeholder="Year">
+<input type="file" id="logoUpload" accept="image/*">
+<input type="file" id="file" accept=".xlsx,.xls">
+<button onclick="generateReport()">Generate Report</button>
+<button onclick="printReport()">Print</button>
+<button onclick="downloadPDF()">Export PDF</button>
+
+<br><br>
+
+<!-- SUBJECT PAGE -->
+<div id="subjectPage" class="report-page">
+  <div class="report-header">
+    <div class="logo-container">
+      <img id="schoolLogo" style="display:none;">
+    </div>
+    <div class="school-info">
+      <h2 id="schoolTitle"></h2>
+      <h3 id="schoolYear"></h3>
+    </div>
+  </div>
+
+  <div id="subjectSummary"></div>
+
+  <div class="signature">
+    Signature: ___________________________<br><br>
+    <strong>MAWERERE FRANCIS</strong><br>
+    In charge Students Data
+  </div>
+</div>
+
+<div class="page-break"></div>
+
+<!-- GENDER PAGE -->
+<div id="genderPage" class="report-page">
+  <div class="report-header">
+    <div class="logo-container">
+      <img id="schoolLogo2" style="display:none;">
+    </div>
+    <div class="school-info">
+      <h2 id="schoolTitle2"></h2>
+      <h3 id="schoolYear2"></h3>
+    </div>
+  </div>
+
+  <div id="genderSummary"></div>
+
+  <div class="signature">
+    Signature: ___________________________<br><br>
+    <strong>MAWERERE FRANCIS</strong><br>
+    In charge Students Data
+  </div>
+</div>
+
 </div>
 
 <script>
 
-/* WAIT UNTIL PAGE LOADS */
-document.addEventListener("DOMContentLoaded", function(){
+/* LOGIN FIXED */
+function login(){
+ const user=document.getElementById("username").value;
+ const pass=document.getElementById("password").value;
+ if(user==="admin" && pass==="1234"){
+   document.getElementById("loginBox").style.display="none";
+   document.getElementById("app").style.display="block";
+ }else{
+   document.getElementById("loginError").innerText="Use admin / 1234";
+ }
+}
 
-    const loginBtn = document.getElementById("loginBtn");
-
-    loginBtn.addEventListener("click", function(){
-
-        const user = document.getElementById("username").value.trim();
-        const pass = document.getElementById("password").value.trim();
-
-        if(user === "admin" && pass === "1234"){
-
-            document.getElementById("loginScreen").style.display="none";
-            document.getElementById("mainApp").style.display="block";
-
-        }else{
-            document.getElementById("errorMsg").innerText="Wrong login (admin / 1234)";
-        }
-
-    });
-
+/* LOGO */
+document.getElementById("logoUpload").addEventListener("change", function(e){
+ const reader=new FileReader();
+ reader.onload=function(){
+   schoolLogo.src=reader.result;
+   schoolLogo.style.display="block";
+   schoolLogo2.src=reader.result;
+   schoolLogo2.style.display="block";
+ }
+ reader.readAsDataURL(e.target.files[0]);
 });
-</script>
 
+let subjects={}, gender={};
+
+function generateReport(){
+
+ document.getElementById("schoolTitle").innerText=
+ document.getElementById("schoolTitle2").innerText=
+ document.getElementById("schoolName").value;
+
+ document.getElementById("schoolYear").innerText=
+ document.getElementById("schoolYear2").innerText=
+ "UNEB PERFORMANCE REPORT – "+document.getElementById("year").value;
+
+ const file=document.getElementById("file").files[0];
+ if(!file){ alert("Upload Excel file"); return; }
+
+ const reader=new FileReader();
+
+ reader.onload=e=>{
+  const wb=XLSX.read(e.target.result,{type:"array"});
+  const rows=XLSX.utils.sheet_to_json(wb.Sheets[wb.SheetNames[0]]);
+
+  subjects={}; gender={};
+
+  rows.forEach(row=>{
+
+   const sex=String(row.Sex||"").toUpperCase().trim();
+   const project=String(row["PROJECT WORK"]||"X").toUpperCase().trim();
+   const achievements=String(row["SUBJECT ACHIEVEMENTS"]||"").trim();
+   if(!achievements) return;
+
+   const valid=["A","B","C","D","E","X"];
+   const pg=valid.includes(project)?project:"X";
+
+   achievements.split(" ").forEach(item=>{
+     if(!item.includes("-")) return;
+
+     const [subjectRaw,gradeRaw]=item.split("-");
+     const subject=subjectRaw.toUpperCase().trim();
+     const g=valid.includes(gradeRaw)?gradeRaw:"X";
+
+     if(!subjects[subject]){
+       subjects[subject]={sat:0,A:0,B:0,C:0,D:0,E:0,X:0,PA:0,PB:0,PC:0,PD:0,PE:0,PX:0};
+     }
+
+     subjects[subject].sat++;
+     subjects[subject][g]++;
+     subjects[subject]["P"+pg]++;
+
+     if(!gender[subject]){
+       gender[subject]={MA:0,MB:0,MC:0,MD:0,ME:0,FA:0,FB:0,FC:0,FD:0,FE:0};
+     }
+
+     if(sex==="M" && g!=="X") gender[subject]["M"+g]++;
+     if(sex==="F" && g!=="X") gender[subject]["F"+g]++;
+   });
+  });
+
+  renderSubject();
+  renderGender();
+ };
+
+ reader.readAsArrayBuffer(file);
+}
+
+/* SUBJECT TABLE WITH PROJECT + TOTAL */
+function renderSubject(){
+
+ let totals={A:0,B:0,C:0,D:0,E:0};
+ let projectTotals={PA:0,PB:0,PC:0,PD:0,PE:0,PX:0};
+
+ let h=`<h3 style="text-align:center;">Subject Summary</h3>
+ <table>
+ <tr>
+ <th>Subject</th><th>Sat</th>
+ <th>A</th><th>B</th><th>C</th>
+ <th>D</th><th>E</th><th>X</th>
+ </tr>`;
+
+ Object.keys(subjects).forEach(s=>{
+  let x=subjects[s];
+
+  totals.A+=x.A; totals.B+=x.B; totals.C+=x.C;
+  totals.D+=x.D; totals.E+=x.E;
+
+  projectTotals.PA+=x.PA;
+  projectTotals.PB+=x.PB;
+  projectTotals.PC+=x.PC;
+  projectTotals.PD+=x.PD;
+  projectTotals.PE+=x.PE;
+  projectTotals.PX+=x.PX;
+
+  h+=`<tr>
+  <td>${s}</td><td>${x.sat}</td>
+  <td>${x.A}</td><td>${x.B}</td><td>${x.C}</td>
+  <td>${x.D}</td><td>${x.E}</td><td>${x.X}</td>
+  </tr>`;
+ });
+
+ /* PROJECT ROW */
+ h+=`<tr style="font-weight:bold;background:#e0f2fe;">
+ <td>PROJECT WORK</td><td></td>
+ <td>${projectTotals.PA}</td>
+ <td>${projectTotals.PB}</td>
+ <td>${projectTotals.PC}</td>
+ <td>${projectTotals.PD}</td>
+ <td>${projectTotals.PE}</td>
+ <td>${projectTotals.PX}</td>
+ </tr>`;
+
+ /* TOTAL ROW */
+ h+=`<tfoot>
+ <tr>
+ <td>TOTAL (A–E)</td><td></td>
+ <td>${totals.A}</td>
+ <td>${totals.B}</td>
+ <td>${totals.C}</td>
+ <td>${totals.D}</td>
+ <td>${totals.E}</td>
+ <td></td>
+ </tr>
+ </tfoot></table>`;
+
+ subjectSummary.innerHTML=h;
+}
+
+/* GENDER TABLE */
+function renderGender(){
+
+ let h=`<h3 style="text-align:center;">Gender Summary</h3>
+ <table>
+ <tr>
+ <th>Subject</th>
+ <th>MA</th><th>MB</th><th>MC</th>
+ <th>MD</th><th>ME</th>
+ <th>FA</th><th>FB</th>
+ <th>FC</th><th>FD</th><th>FE</th>
+ </tr>`;
+
+ Object.keys(gender).forEach(s=>{
+  let g=gender[s];
+  h+=`<tr>
+  <td>${s}</td>
+  <td>${g.MA}</td><td>${g.MB}</td><td>${g.MC}</td>
+  <td>${g.MD}</td><td>${g.ME}</td>
+  <td>${g.FA}</td><td>${g.FB}</td>
+  <td>${g.FC}</td><td>${g.FD}</td><td>${g.FE}</td>
+  </tr>`;
+ });
+
+ h+=`</table>`;
+ genderSummary.innerHTML=h;
+}
+
+function printReport(){ window.print(); }
+
+function downloadPDF(){
+ html2pdf().set({
+   margin:10,
+   filename:"UNEB_Report.pdf",
+   html2canvas:{scale:2},
+   jsPDF:{orientation:"landscape"}
+ }).from(document.body).save();
+}
+
+</script>
 </body>
 </html>
