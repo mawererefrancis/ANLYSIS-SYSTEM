@@ -21,7 +21,7 @@ body{
   background:var(--light);
 }
 
-/* LOGIN PAGE */
+/* LOGIN */
 #loginBox{
   height:100vh;
   display:flex;
@@ -57,15 +57,8 @@ button{
   cursor:pointer;
 }
 
-button:hover{
-  background:#1d4ed8;
-}
-
-/* APP AREA */
-#app{
-  display:none;
-  padding:20px;
-}
+/* APP */
+#app{ display:none; padding:20px; }
 
 input{
   padding:6px;
@@ -74,13 +67,14 @@ input{
   border:1px solid #cbd5e1;
 }
 
-.report-box{
+/* PAGE SECTION */
+.report-page{
   background:white;
-  padding:15px;
-  border-radius:10px;
-  box-shadow:0 5px 20px rgba(0,0,0,0.1);
+  padding:20px;
+  margin-bottom:30px;
   position:relative;
   min-height:90vh;
+  box-shadow:0 5px 20px rgba(0,0,0,0.1);
 }
 
 /* HEADER */
@@ -99,30 +93,20 @@ input{
 
 .logo-container img{
   height:70px;
-  width:auto;
 }
 
 .school-info{
   text-align:center;
 }
 
-.school-info h2{
-  margin:0;
-  font-size:22px;
-}
+.school-info h2{ margin:0; font-size:22px; }
+.school-info h3{ margin:0; font-size:15px; color:#475569; }
 
-.school-info h3{
-  margin:0;
-  font-size:15px;
-  color:#475569;
-}
-
-/* TABLES */
+/* TABLE */
 table{
   width:100%;
   border-collapse:collapse;
   font-size:10px;
-  margin-top:5px;
 }
 
 th{
@@ -136,71 +120,50 @@ td{
   text-align:center;
 }
 
-th,td{
-  border:1px solid #cbd5e1;
-}
+th,td{ border:1px solid #cbd5e1; }
 
-tr:nth-child(even){
-  background:#f8fafc;
-}
+tr:nth-child(even){ background:#f8fafc; }
 
 tfoot td{
   font-weight:bold;
   background:#e2e8f0;
 }
 
-/* SUMMARY */
-.summary-cards{
-  display:flex;
-  justify-content:center;
-  gap:20px;
-  margin-top:8px;
-  font-weight:bold;
-}
-
-.card{
-  background:#e0f2fe;
-  padding:6px 12px;
-  border-radius:6px;
-}
-
 /* SIGNATURE */
 .signature{
   position:absolute;
-  bottom:15px;
+  bottom:20px;
   left:20px;
   font-size:11px;
+}
+
+/* PAGE BREAK */
+.page-break{
+  page-break-after:always;
 }
 
 /* PRINT */
 @page{
   size:A4 landscape;
-  margin:8mm;
+  margin:10mm;
 }
 
 @media print{
 
-  button,input{
-    display:none;
-  }
+  button,input{ display:none; }
 
-  table{
-    font-size:9px;
-  }
-
-  .report-box{
+  .report-page{
     box-shadow:none;
+    margin:0;
   }
 
-  .signature{
-    position:absolute;
-    bottom:10mm;
-    left:15mm;
+  table{ font-size:9px; }
+
+  .page-break{
+    page-break-after:always;
   }
 
-  *{
-    page-break-inside:avoid !important;
-  }
+  *{ page-break-inside:avoid !important; }
 }
 
 </style>
@@ -218,10 +181,8 @@ tfoot td{
   </div>
 </div>
 
-<!-- APP -->
 <div id="app">
 
-<div style="margin-bottom:10px;">
 <input id="schoolName" placeholder="School Name">
 <input id="year" placeholder="Year">
 <input type="file" id="logoUpload" accept="image/*">
@@ -229,90 +190,95 @@ tfoot td{
 <button onclick="generateReport()">Generate Report</button>
 <button onclick="printReport()">Print</button>
 <button onclick="downloadPDF()">Export PDF</button>
-<button onclick="exportExcel()">Export Excel</button>
-<button onclick="logout()">Logout</button>
-</div>
 
-<div id="reportArea" class="report-box">
+<br><br>
 
-<div class="report-header">
-  <div class="logo-container">
-    <img id="schoolLogo" style="display:none;">
+<!-- SUBJECT PAGE -->
+<div id="subjectPage" class="report-page">
+  <div class="report-header">
+    <div class="logo-container">
+      <img id="schoolLogo" style="display:none;">
+    </div>
+    <div class="school-info">
+      <h2 id="schoolTitle"></h2>
+      <h3 id="schoolYear"></h3>
+    </div>
   </div>
-  <div class="school-info">
-    <h2 id="schoolTitle">SCHOOL NAME</h2>
-    <h3 id="schoolYear">UNEB PERFORMANCE REPORT</h3>
+
+  <div id="subjectSummary"></div>
+
+  <div class="signature">
+    Signature: ___________________________<br><br>
+    <strong>MAWERERE FRANCIS</strong><br>
+    In charge Students Data
   </div>
 </div>
 
-<div id="subjectSummary"></div>
-<div id="genderSummary"></div>
-<div id="analytics"></div>
+<div class="page-break"></div>
 
-<div class="signature">
-Signature: ___________________________<br><br>
-<strong>MAWERERE FRANCIS</strong><br>
-In charge Students Data<br>
-Contact: 0788222315<br>
-Email: mawererefrancis@gmail.com
+<!-- GENDER PAGE -->
+<div id="genderPage" class="report-page">
+  <div class="report-header">
+    <div class="logo-container">
+      <img id="schoolLogo2" style="display:none;">
+    </div>
+    <div class="school-info">
+      <h2 id="schoolTitle2"></h2>
+      <h3 id="schoolYear2"></h3>
+    </div>
+  </div>
+
+  <div id="genderSummary"></div>
+
+  <div class="signature">
+    Signature: ___________________________<br><br>
+    <strong>MAWERERE FRANCIS</strong><br>
+    In charge Students Data
+  </div>
 </div>
 
-</div>
 </div>
 
 <script>
 
-/* LOGIN (FIXED FOR GITHUB) */
+/* LOGIN FIXED */
 function login(){
-
-  const user = document.getElementById("username").value;
-  const pass = document.getElementById("password").value;
-  const loginBox = document.getElementById("loginBox");
-  const app = document.getElementById("app");
-  const error = document.getElementById("loginError");
-
-  if(user === "admin" && pass === "1234"){
-      loginBox.style.display = "none";
-      app.style.display = "block";
-      error.innerText = "";
-  }else{
-      error.innerText = "Use admin / 1234";
-  }
-}
-
-/* LOGOUT */
-function logout(){
-  document.getElementById("app").style.display="none";
-  document.getElementById("loginBox").style.display="flex";
-}
-
-/* LOGO UPLOAD */
-document.getElementById("logoUpload").addEventListener("change", function(e){
- const file = e.target.files[0];
- if(!file) return;
- const reader = new FileReader();
- reader.onload = function(){
-   const logo = document.getElementById("schoolLogo");
-   logo.src = reader.result;
-   logo.style.display="block";
+ const user=document.getElementById("username").value;
+ const pass=document.getElementById("password").value;
+ if(user==="admin" && pass==="1234"){
+   document.getElementById("loginBox").style.display="none";
+   document.getElementById("app").style.display="block";
+ }else{
+   document.getElementById("loginError").innerText="Use admin / 1234";
  }
- reader.readAsDataURL(file);
+}
+
+/* LOGO */
+document.getElementById("logoUpload").addEventListener("change", function(e){
+ const reader=new FileReader();
+ reader.onload=function(){
+   schoolLogo.src=reader.result;
+   schoolLogo.style.display="block";
+   schoolLogo2.src=reader.result;
+   schoolLogo2.style.display="block";
+ }
+ reader.readAsDataURL(e.target.files[0]);
 });
 
 let subjects={}, gender={};
 
-/* GENERATE REPORT */
 function generateReport(){
+
+ document.getElementById("schoolTitle").innerText=
+ document.getElementById("schoolTitle2").innerText=
+ document.getElementById("schoolName").value;
+
+ document.getElementById("schoolYear").innerText=
+ document.getElementById("schoolYear2").innerText=
+ "UNEB PERFORMANCE REPORT – "+document.getElementById("year").value;
 
  const file=document.getElementById("file").files[0];
  if(!file){ alert("Upload Excel file"); return; }
-
- document.getElementById("schoolTitle").innerText =
-   document.getElementById("schoolName").value || "SCHOOL NAME";
-
- document.getElementById("schoolYear").innerText =
-   "UNEB PERFORMANCE REPORT – " +
-   (document.getElementById("year").value||"");
 
  const reader=new FileReader();
 
@@ -323,44 +289,52 @@ function generateReport(){
   subjects={}; gender={};
 
   rows.forEach(row=>{
+
    const sex=String(row.Sex||"").toUpperCase().trim();
+   const project=String(row["PROJECT WORK"]||"X").toUpperCase().trim();
    const achievements=String(row["SUBJECT ACHIEVEMENTS"]||"").trim();
    if(!achievements) return;
 
    const valid=["A","B","C","D","E","X"];
+   const pg=valid.includes(project)?project:"X";
 
    achievements.split(" ").forEach(item=>{
      if(!item.includes("-")) return;
+
      const [subjectRaw,gradeRaw]=item.split("-");
      const subject=subjectRaw.toUpperCase().trim();
      const g=valid.includes(gradeRaw)?gradeRaw:"X";
 
      if(!subjects[subject]){
-       subjects[subject]={sat:0,A:0,B:0,C:0,D:0,E:0,X:0};
+       subjects[subject]={sat:0,A:0,B:0,C:0,D:0,E:0,X:0,PA:0,PB:0,PC:0,PD:0,PE:0,PX:0};
      }
 
      subjects[subject].sat++;
      subjects[subject][g]++;
+     subjects[subject]["P"+pg]++;
 
      if(!gender[subject]){
        gender[subject]={MA:0,MB:0,MC:0,MD:0,ME:0,FA:0,FB:0,FC:0,FD:0,FE:0};
      }
 
-     if(sex==="M"&&g!=="X") gender[subject]["M"+g]++;
-     if(sex==="F"&&g!=="X") gender[subject]["F"+g]++;
+     if(sex==="M" && g!=="X") gender[subject]["M"+g]++;
+     if(sex==="F" && g!=="X") gender[subject]["F"+g]++;
    });
   });
 
   renderSubject();
   renderGender();
-  renderAnalytics();
  };
 
  reader.readAsArrayBuffer(file);
 }
 
-/* SUBJECT TABLE */
+/* SUBJECT TABLE WITH PROJECT + TOTAL */
 function renderSubject(){
+
+ let totals={A:0,B:0,C:0,D:0,E:0};
+ let projectTotals={PA:0,PB:0,PC:0,PD:0,PE:0,PX:0};
+
  let h=`<h3 style="text-align:center;">Subject Summary</h3>
  <table>
  <tr>
@@ -371,6 +345,17 @@ function renderSubject(){
 
  Object.keys(subjects).forEach(s=>{
   let x=subjects[s];
+
+  totals.A+=x.A; totals.B+=x.B; totals.C+=x.C;
+  totals.D+=x.D; totals.E+=x.E;
+
+  projectTotals.PA+=x.PA;
+  projectTotals.PB+=x.PB;
+  projectTotals.PC+=x.PC;
+  projectTotals.PD+=x.PD;
+  projectTotals.PE+=x.PE;
+  projectTotals.PX+=x.PX;
+
   h+=`<tr>
   <td>${s}</td><td>${x.sat}</td>
   <td>${x.A}</td><td>${x.B}</td><td>${x.C}</td>
@@ -378,12 +363,36 @@ function renderSubject(){
   </tr>`;
  });
 
- h+=`</table>`;
+ /* PROJECT ROW */
+ h+=`<tr style="font-weight:bold;background:#e0f2fe;">
+ <td>PROJECT WORK</td><td></td>
+ <td>${projectTotals.PA}</td>
+ <td>${projectTotals.PB}</td>
+ <td>${projectTotals.PC}</td>
+ <td>${projectTotals.PD}</td>
+ <td>${projectTotals.PE}</td>
+ <td>${projectTotals.PX}</td>
+ </tr>`;
+
+ /* TOTAL ROW */
+ h+=`<tfoot>
+ <tr>
+ <td>TOTAL (A–E)</td><td></td>
+ <td>${totals.A}</td>
+ <td>${totals.B}</td>
+ <td>${totals.C}</td>
+ <td>${totals.D}</td>
+ <td>${totals.E}</td>
+ <td></td>
+ </tr>
+ </tfoot></table>`;
+
  subjectSummary.innerHTML=h;
 }
 
 /* GENDER TABLE */
 function renderGender(){
+
  let h=`<h3 style="text-align:center;">Gender Summary</h3>
  <table>
  <tr>
@@ -409,62 +418,15 @@ function renderGender(){
  genderSummary.innerHTML=h;
 }
 
-/* ANALYTICS */
-function renderAnalytics(){
- let totalA=0,totalSat=0;
- Object.values(subjects).forEach(x=>{
-   totalA+=x.A;
-   totalSat+=x.sat;
- });
- let mean=(totalA/totalSat*100)||0;
- let comment=mean>=40?"Excellent Performance":
-              mean>=25?"Good Performance":"Needs Improvement";
-
- analytics.innerHTML=`
- <div class="summary-cards">
-   <div class="card">School %A: ${mean.toFixed(1)}%</div>
-   <div class="card">${comment}</div>
- </div>`;
-}
-
 function printReport(){ window.print(); }
 
 function downloadPDF(){
  html2pdf().set({
-   margin:5,
+   margin:10,
    filename:"UNEB_Report.pdf",
    html2canvas:{scale:2},
    jsPDF:{orientation:"landscape"}
- }).from(document.getElementById("reportArea")).save();
-}
-
-/* EXCEL EXPORT */
-function exportExcel(){
- let wb = XLSX.utils.book_new();
-
- let subjectData=[["Subject","Sat","A","B","C","D","E","X"]];
- Object.keys(subjects).forEach(s=>{
-  let x=subjects[s];
-  subjectData.push([s,x.sat,x.A,x.B,x.C,x.D,x.E,x.X]);
- });
-
- XLSX.utils.book_append_sheet(wb,
-   XLSX.utils.aoa_to_sheet(subjectData),
-   "Subject Summary"
- );
-
- let genderData=[["Subject","MA","MB","MC","MD","ME","FA","FB","FC","FD","FE"]];
- Object.keys(gender).forEach(s=>{
-  let g=gender[s];
-  genderData.push([s,g.MA,g.MB,g.MC,g.MD,g.ME,g.FA,g.FB,g.FC,g.FD,g.FE]);
- });
-
- XLSX.utils.book_append_sheet(wb,
-   XLSX.utils.aoa_to_sheet(genderData),
-   "Gender Summary"
- );
-
- XLSX.writeFile(wb,"UNEB_Report.xlsx");
+ }).from(document.body).save();
 }
 
 </script>
