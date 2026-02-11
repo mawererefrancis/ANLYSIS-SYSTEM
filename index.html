@@ -21,7 +21,7 @@ body{
   background:var(--light);
 }
 
-/* LOGIN */
+/* LOGIN PAGE */
 #loginBox{
   height:100vh;
   display:flex;
@@ -61,7 +61,7 @@ button:hover{
   background:#1d4ed8;
 }
 
-/* APP */
+/* APP AREA */
 #app{
   display:none;
   padding:20px;
@@ -172,7 +172,7 @@ tfoot td{
   font-size:11px;
 }
 
-/* PRINT SETTINGS */
+/* PRINT */
 @page{
   size:A4 landscape;
   margin:8mm;
@@ -230,6 +230,7 @@ tfoot td{
 <button onclick="printReport()">Print</button>
 <button onclick="downloadPDF()">Export PDF</button>
 <button onclick="exportExcel()">Export Excel</button>
+<button onclick="logout()">Logout</button>
 </div>
 
 <div id="reportArea" class="report-box">
@@ -261,39 +262,57 @@ Email: mawererefrancis@gmail.com
 
 <script>
 
-/* LOGIN */
+/* LOGIN (FIXED FOR GITHUB) */
 function login(){
- if(username.value==="admin" && password.value==="1234"){
-  loginBox.style.display="none";
-  app.style.display="block";
- }else{
-  loginError.innerText="Use admin / 1234";
- }
+
+  const user = document.getElementById("username").value;
+  const pass = document.getElementById("password").value;
+  const loginBox = document.getElementById("loginBox");
+  const app = document.getElementById("app");
+  const error = document.getElementById("loginError");
+
+  if(user === "admin" && pass === "1234"){
+      loginBox.style.display = "none";
+      app.style.display = "block";
+      error.innerText = "";
+  }else{
+      error.innerText = "Use admin / 1234";
+  }
+}
+
+/* LOGOUT */
+function logout(){
+  document.getElementById("app").style.display="none";
+  document.getElementById("loginBox").style.display="flex";
 }
 
 /* LOGO UPLOAD */
 document.getElementById("logoUpload").addEventListener("change", function(e){
+ const file = e.target.files[0];
+ if(!file) return;
  const reader = new FileReader();
  reader.onload = function(){
    const logo = document.getElementById("schoolLogo");
    logo.src = reader.result;
    logo.style.display="block";
  }
- reader.readAsDataURL(e.target.files[0]);
+ reader.readAsDataURL(file);
 });
 
 let subjects={}, gender={};
 
+/* GENERATE REPORT */
 function generateReport(){
 
  const file=document.getElementById("file").files[0];
  if(!file){ alert("Upload Excel file"); return; }
 
  document.getElementById("schoolTitle").innerText =
-   schoolName.value || "SCHOOL NAME";
+   document.getElementById("schoolName").value || "SCHOOL NAME";
 
  document.getElementById("schoolYear").innerText =
-   "UNEB PERFORMANCE REPORT – " + (year.value||"");
+   "UNEB PERFORMANCE REPORT â€“ " +
+   (document.getElementById("year").value||"");
 
  const reader=new FileReader();
 
@@ -305,12 +324,10 @@ function generateReport(){
 
   rows.forEach(row=>{
    const sex=String(row.Sex||"").toUpperCase().trim();
-   const project=String(row["PROJECT WORK"]||"X").toUpperCase().trim();
    const achievements=String(row["SUBJECT ACHIEVEMENTS"]||"").trim();
    if(!achievements) return;
 
    const valid=["A","B","C","D","E","X"];
-   const pg=valid.includes(project)?project:"X";
 
    achievements.split(" ").forEach(item=>{
      if(!item.includes("-")) return;
@@ -344,7 +361,6 @@ function generateReport(){
 
 /* SUBJECT TABLE */
 function renderSubject(){
-
  let h=`<h3 style="text-align:center;">Subject Summary</h3>
  <table>
  <tr>
@@ -368,7 +384,6 @@ function renderSubject(){
 
 /* GENDER TABLE */
 function renderGender(){
-
  let h=`<h3 style="text-align:center;">Gender Summary</h3>
  <table>
  <tr>
@@ -383,4 +398,75 @@ function renderGender(){
   let g=gender[s];
   h+=`<tr>
   <td>${s}</td>
-  <td>${g.MA}</td><td
+  <td>${g.MA}</td><td>${g.MB}</td><td>${g.MC}</td>
+  <td>${g.MD}</td><td>${g.ME}</td>
+  <td>${g.FA}</td><td>${g.FB}</td>
+  <td>${g.FC}</td><td>${g.FD}</td><td>${g.FE}</td>
+  </tr>`;
+ });
+
+ h+=`</table>`;
+ genderSummary.innerHTML=h;
+}
+
+/* ANALYTICS */
+function renderAnalytics(){
+ let totalA=0,totalSat=0;
+ Object.values(subjects).forEach(x=>{
+   totalA+=x.A;
+   totalSat+=x.sat;
+ });
+ let mean=(totalA/totalSat*100)||0;
+ let comment=mean>=40?"Excellent Performance":
+              mean>=25?"Good Performance":"Needs Improvement";
+
+ analytics.innerHTML=`
+ <div class="summary-cards">
+   <div class="card">School %A: ${mean.toFixed(1)}%</div>
+   <div class="card">${comment}</div>
+ </div>`;
+}
+
+function printReport(){ window.print(); }
+
+function downloadPDF(){
+ html2pdf().set({
+   margin:5,
+   filename:"UNEB_Report.pdf",
+   html2canvas:{scale:2},
+   jsPDF:{orientation:"landscape"}
+ }).from(document.getElementById("reportArea")).save();
+}
+
+/* EXCEL EXPORT */
+function exportExcel(){
+ let wb = XLSX.utils.book_new();
+
+ let subjectData=[["Subject","Sat","A","B","C","D","E","X"]];
+ Object.keys(subjects).forEach(s=>{
+  let x=subjects[s];
+  subjectData.push([s,x.sat,x.A,x.B,x.C,x.D,x.E,x.X]);
+ });
+
+ XLSX.utils.book_append_sheet(wb,
+   XLSX.utils.aoa_to_sheet(subjectData),
+   "Subject Summary"
+ );
+
+ let genderData=[["Subject","MA","MB","MC","MD","ME","FA","FB","FC","FD","FE"]];
+ Object.keys(gender).forEach(s=>{
+  let g=gender[s];
+  genderData.push([s,g.MA,g.MB,g.MC,g.MD,g.ME,g.FA,g.FB,g.FC,g.FD,g.FE]);
+ });
+
+ XLSX.utils.book_append_sheet(wb,
+   XLSX.utils.aoa_to_sheet(genderData),
+   "Gender Summary"
+ );
+
+ XLSX.writeFile(wb,"UNEB_Report.xlsx");
+}
+
+</script>
+</body>
+</html>
