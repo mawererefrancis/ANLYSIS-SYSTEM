@@ -8,311 +8,132 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
 
 <style>
-
-:root{
-  --primary:#0f172a;
-  --accent:#2563eb;
-  --light:#f1f5f9;
-}
-
 body{
-  font-family:"Segoe UI",Arial,sans-serif;
-  margin:0;
-  background:var(--light);
+    font-family:Arial, sans-serif;
+    margin:0;
+    background:#f4f6f9;
 }
 
 /* LOGIN */
-#loginBox{
-  height:100vh;
-  display:flex;
-  justify-content:center;
-  align-items:center;
-  background:linear-gradient(135deg,#1e293b,#0f172a);
+#loginContainer{
+    height:100vh;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    background:#0f172a;
 }
 
-.login-card{
-  background:white;
-  padding:30px;
-  border-radius:12px;
-  width:320px;
-  text-align:center;
-  box-shadow:0 10px 25px rgba(0,0,0,0.3);
+.loginBox{
+    background:white;
+    padding:30px;
+    border-radius:8px;
+    width:320px;
+    text-align:center;
 }
 
-.login-card input{
-  width:90%;
-  padding:8px;
-  margin:8px 0;
-  border-radius:6px;
-  border:1px solid #cbd5e1;
+.loginBox input{
+    width:90%;
+    padding:8px;
+    margin:8px 0;
 }
 
-button{
-  padding:8px 14px;
-  border:none;
-  border-radius:6px;
-  background:var(--accent);
-  color:white;
-  font-weight:600;
-  cursor:pointer;
+.loginBox button{
+    padding:8px 14px;
+    background:#2563eb;
+    color:white;
+    border:none;
+    cursor:pointer;
 }
 
 /* APP */
-#app{ display:none; padding:20px; }
-
-input{
-  padding:6px;
-  margin:4px;
-  border-radius:6px;
-  border:1px solid #cbd5e1;
+#app{
+    display:none;
+    padding:20px;
 }
 
-/* PAGE */
 .report-page{
-  background:white;
-  padding:18px;
-  margin-bottom:30px;
-  position:relative;
-  min-height:90vh;
-  box-shadow:0 5px 20px rgba(0,0,0,0.08);
+    background:white;
+    padding:20px;
+    margin-bottom:40px;
+    position:relative;
+    min-height:90vh;
 }
 
-/* HEADER */
-.report-header{
-  display:flex;
-  align-items:center;
-  justify-content:center;
-  position:relative;
-  margin-bottom:10px;
+.header{
+    text-align:center;
+    margin-bottom:10px;
 }
 
-.logo-container{
-  position:absolute;
-  left:0;
+.header img{
+    position:absolute;
+    left:30px;
+    height:70px;
 }
 
-.logo-container img{
-  height:75px;
-}
-
-.school-info{
-  text-align:center;
-}
-
-.school-info h2{
-  margin:0;
-  font-size:20px;
-}
-
-.school-info h3{
-  margin:0;
-  font-size:14px;
-  color:#475569;
-}
-
-/* TABLE */
 table{
-  width:100%;
-  border-collapse:collapse;
-  font-size:12px;
+    width:100%;
+    border-collapse:collapse;
+    font-size:12px;
+}
+
+th, td{
+    border:1px solid #000;
+    padding:4px;
+    text-align:center;
 }
 
 th{
-  background:var(--primary);
-  color:white;
-  padding:5px 4px;
-  font-size:12px;
+    background:#e2e8f0;
 }
 
-td{
-  padding:4px 3px;
-  text-align:center;
-}
-
-th,td{
-  border:1px solid #cbd5e1;
-}
-
-tr:nth-child(even){
-  background:#f8fafc;
-}
-
-tfoot td{
-  font-weight:bold;
-  background:#e2e8f0;
-}
-
-/* SIGNATURE */
 .signature{
-  position:absolute;
-  bottom:25px;
-  left:25px;
-  font-size:12px;
+    position:absolute;
+    bottom:30px;
+    left:30px;
+    font-size:12px;
 }
 
-/* PAGE BREAK */
-.page-break{
-  page-break-after:always;
-}
-
-/* PRINT */
 @page{
-  size:A4 landscape;
-  margin:12mm;
+    size:A4 landscape;
+    margin:10mm;
 }
 
 @media print{
-
-  button,input{ display:none; }
-
-  .report-page{
-    box-shadow:none;
-    margin:0;
-    padding:15px;
-  }
-
-  table{
-    font-size:11px;
-  }
-
-  th{ font-size:11px; }
-
-  .signature{
-    font-size:11px;
-  }
-
-  *{
-    page-break-inside:avoid !important;
-  }
+    button,input{
+        display:none;
+    }
+    table{
+        font-size:11px;
+    }
 }
-
 </style>
 </head>
 <body>
 
 <!-- LOGIN -->
-<div id="loginBox">
-  <div class="login-card">
-    <h2>UNEB Analytics Login</h2>
-    <input id="username" placeholder="Username"><br>
-    <input id="password" type="password" placeholder="Password"><br>
-    <button onclick="login()">Login</button>
-    <p id="loginError" style="color:red;"></p>
-  </div>
+<div id="loginContainer">
+    <div class="loginBox">
+        <h2>UNEB Login</h2>
+        <input type="text" id="userField" placeholder="Username"><br>
+        <input type="password" id="passField" placeholder="Password"><br>
+        <button onclick="checkLogin()">Login</button>
+        <p id="loginMsg" style="color:red;"></p>
+    </div>
 </div>
 
+<!-- MAIN APP -->
 <div id="app">
 
-<input id="schoolName" placeholder="School Name">
-<input id="year" placeholder="Year">
-<input type="file" id="logoUpload" accept="image/*">
-<input type="file" id="file" accept=".xlsx,.xls">
-<button onclick="generateReport()">Generate Report</button>
-<button onclick="printReport()">Print</button>
-<button onclick="downloadPDF()">Export PDF</button>
+<input type="text" id="schoolName" placeholder="School Name">
+<input type="text" id="examYear" placeholder="Year">
+<input type="file" id="logoInput" accept="image/*">
+<input type="file" id="excelInput" accept=".xlsx,.xls">
+<button onclick="processFile()">Generate</button>
+<button onclick="window.print()">Print</button>
 
 <br><br>
 
 <!-- SUBJECT PAGE -->
-<div id="subjectPage" class="report-page">
-  <div class="report-header">
-    <div class="logo-container">
-      <img id="schoolLogo" style="display:none;">
-    </div>
-    <div class="school-info">
-      <h2 id="schoolTitle"></h2>
-      <h3 id="schoolYear"></h3>
-    </div>
-  </div>
-
-  <div id="subjectSummary"></div>
-
-  <div class="signature">
-    Signature: ___________________________<br><br>
-    <strong>MAWERERE FRANCIS</strong><br>
-    In charge Students Data
-  </div>
-</div>
-
-<div class="page-break"></div>
-
-<!-- GENDER PAGE -->
-<div id="genderPage" class="report-page">
-  <div class="report-header">
-    <div class="logo-container">
-      <img id="schoolLogo2" style="display:none;">
-    </div>
-    <div class="school-info">
-      <h2 id="schoolTitle2"></h2>
-      <h3 id="schoolYear2"></h3>
-    </div>
-  </div>
-
-  <div id="genderSummary"></div>
-
-  <div class="signature">
-    Signature: ___________________________<br><br>
-    <strong>MAWERERE FRANCIS</strong><br>
-    In charge Students Data
-  </div>
-</div>
-
-</div>
-
-<script>
-
-/* LOGIN */
-function login(){
- const user=document.getElementById("username").value;
- const pass=document.getElementById("password").value;
- if(user==="admin" && pass==="1234"){
-   document.getElementById("loginBox").style.display="none";
-   document.getElementById("app").style.display="block";
- }else{
-   document.getElementById("loginError").innerText="Use admin / 1234";
- }
-}
-
-/* LOGO */
-document.getElementById("logoUpload").addEventListener("change", function(e){
- const reader=new FileReader();
- reader.onload=function(){
-   schoolLogo.src=reader.result;
-   schoolLogo.style.display="block";
-   schoolLogo2.src=reader.result;
-   schoolLogo2.style.display="block";
- }
- reader.readAsDataURL(e.target.files[0]);
-});
-
-let subjects={}, gender={};
-
-function generateReport(){
-
- document.getElementById("schoolTitle").innerText=
- document.getElementById("schoolTitle2").innerText=
- document.getElementById("schoolName").value;
-
- document.getElementById("schoolYear").innerText=
- document.getElementById("schoolYear2").innerText=
- "UNEB PERFORMANCE REPORT – "+document.getElementById("year").value;
-
- const file=document.getElementById("file").files[0];
- if(!file){ alert("Upload Excel file"); return; }
-
- const reader=new FileReader();
-
- reader.onload=e=>{
-  const wb=XLSX.read(e.target.result,{type:"array"});
-  const rows=XLSX.utils.sheet_to_json(wb.Sheets[wb.SheetNames[0]]);
-
-  subjects={}; gender={};
-
-  rows.forEach(row=>{
-
-   const sex=String(row.Sex||"").toUpperCase().trim();
-   const project=String(row["PROJECT WORK"]||"X").toUpperCase().trim();
-   const achievements=String(row["SUBJECT ACHIEVEMENTS"]||"").trim();
-   if(!achievements) return;
-
-   cons
+<div class="report-page">
+<div class="header">
+    <img id="logo1">
