@@ -4,18 +4,14 @@
 <meta charset="UTF-8">
 <title>UNEB Analytics System</title>
 
-<script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
-
 <style>
 body{
-    font-family:Arial, sans-serif;
     margin:0;
-    background:#f4f6f9;
+    font-family:Arial, sans-serif;
 }
 
-/* LOGIN */
-#loginContainer{
+/* LOGIN SCREEN */
+#loginScreen{
     height:100vh;
     display:flex;
     justify-content:center;
@@ -26,114 +22,75 @@ body{
 .loginBox{
     background:white;
     padding:30px;
-    border-radius:8px;
     width:320px;
+    border-radius:8px;
     text-align:center;
 }
 
 .loginBox input{
-    width:90%;
-    padding:8px;
+    width:100%;
+    padding:10px;
     margin:8px 0;
 }
 
 .loginBox button{
-    padding:8px 14px;
+    width:100%;
+    padding:10px;
     background:#2563eb;
     color:white;
     border:none;
     cursor:pointer;
 }
 
-/* APP */
-#app{
+/* MAIN APP */
+#mainApp{
     display:none;
-    padding:20px;
-}
-
-.report-page{
-    background:white;
-    padding:20px;
-    margin-bottom:40px;
-    position:relative;
-    min-height:90vh;
-}
-
-.header{
-    text-align:center;
-    margin-bottom:10px;
-}
-
-.header img{
-    position:absolute;
-    left:30px;
-    height:70px;
-}
-
-table{
-    width:100%;
-    border-collapse:collapse;
-    font-size:12px;
-}
-
-th, td{
-    border:1px solid #000;
-    padding:4px;
-    text-align:center;
-}
-
-th{
-    background:#e2e8f0;
-}
-
-.signature{
-    position:absolute;
-    bottom:30px;
-    left:30px;
-    font-size:12px;
-}
-
-@page{
-    size:A4 landscape;
-    margin:10mm;
-}
-
-@media print{
-    button,input{
-        display:none;
-    }
-    table{
-        font-size:11px;
-    }
+    padding:30px;
 }
 </style>
 </head>
 <body>
 
-<!-- LOGIN -->
-<div id="loginContainer">
+<div id="loginScreen">
     <div class="loginBox">
         <h2>UNEB Login</h2>
-        <input type="text" id="userField" placeholder="Username"><br>
-        <input type="password" id="passField" placeholder="Password"><br>
-        <button onclick="checkLogin()">Login</button>
-        <p id="loginMsg" style="color:red;"></p>
+        <input type="text" id="username" placeholder="Username">
+        <input type="password" id="password" placeholder="Password">
+        <button id="loginBtn">Login</button>
+        <p id="errorMsg" style="color:red;"></p>
     </div>
 </div>
 
-<!-- MAIN APP -->
-<div id="app">
+<div id="mainApp">
+    <h1>Login Successful ✅</h1>
+    <p>Your system is working.</p>
+</div>
 
-<input type="text" id="schoolName" placeholder="School Name">
-<input type="text" id="examYear" placeholder="Year">
-<input type="file" id="logoInput" accept="image/*">
-<input type="file" id="excelInput" accept=".xlsx,.xls">
-<button onclick="processFile()">Generate</button>
-<button onclick="window.print()">Print</button>
+<script>
 
-<br><br>
+/* WAIT UNTIL PAGE LOADS */
+document.addEventListener("DOMContentLoaded", function(){
 
-<!-- SUBJECT PAGE -->
-<div class="report-page">
-<div class="header">
-    <img id="logo1">
+    const loginBtn = document.getElementById("loginBtn");
+
+    loginBtn.addEventListener("click", function(){
+
+        const user = document.getElementById("username").value.trim();
+        const pass = document.getElementById("password").value.trim();
+
+        if(user === "admin" && pass === "1234"){
+
+            document.getElementById("loginScreen").style.display="none";
+            document.getElementById("mainApp").style.display="block";
+
+        }else{
+            document.getElementById("errorMsg").innerText="Wrong login (admin / 1234)";
+        }
+
+    });
+
+});
+</script>
+
+</body>
+</html>
