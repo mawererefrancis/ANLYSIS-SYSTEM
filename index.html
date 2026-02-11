@@ -67,14 +67,14 @@ input{
   border:1px solid #cbd5e1;
 }
 
-/* PAGE SECTION */
+/* PAGE */
 .report-page{
   background:white;
-  padding:20px;
+  padding:18px;
   margin-bottom:30px;
   position:relative;
   min-height:90vh;
-  box-shadow:0 5px 20px rgba(0,0,0,0.1);
+  box-shadow:0 5px 20px rgba(0,0,0,0.08);
 }
 
 /* HEADER */
@@ -92,37 +92,50 @@ input{
 }
 
 .logo-container img{
-  height:70px;
+  height:75px;
 }
 
 .school-info{
   text-align:center;
 }
 
-.school-info h2{ margin:0; font-size:22px; }
-.school-info h3{ margin:0; font-size:15px; color:#475569; }
+.school-info h2{
+  margin:0;
+  font-size:20px;
+}
+
+.school-info h3{
+  margin:0;
+  font-size:14px;
+  color:#475569;
+}
 
 /* TABLE */
 table{
   width:100%;
   border-collapse:collapse;
-  font-size:10px;
+  font-size:12px;
 }
 
 th{
   background:var(--primary);
   color:white;
-  padding:4px;
+  padding:5px 4px;
+  font-size:12px;
 }
 
 td{
-  padding:3px;
+  padding:4px 3px;
   text-align:center;
 }
 
-th,td{ border:1px solid #cbd5e1; }
+th,td{
+  border:1px solid #cbd5e1;
+}
 
-tr:nth-child(even){ background:#f8fafc; }
+tr:nth-child(even){
+  background:#f8fafc;
+}
 
 tfoot td{
   font-weight:bold;
@@ -132,9 +145,9 @@ tfoot td{
 /* SIGNATURE */
 .signature{
   position:absolute;
-  bottom:20px;
-  left:20px;
-  font-size:11px;
+  bottom:25px;
+  left:25px;
+  font-size:12px;
 }
 
 /* PAGE BREAK */
@@ -145,7 +158,7 @@ tfoot td{
 /* PRINT */
 @page{
   size:A4 landscape;
-  margin:10mm;
+  margin:12mm;
 }
 
 @media print{
@@ -155,15 +168,22 @@ tfoot td{
   .report-page{
     box-shadow:none;
     margin:0;
+    padding:15px;
   }
 
-  table{ font-size:9px; }
-
-  .page-break{
-    page-break-after:always;
+  table{
+    font-size:11px;
   }
 
-  *{ page-break-inside:avoid !important; }
+  th{ font-size:11px; }
+
+  .signature{
+    font-size:11px;
+  }
+
+  *{
+    page-break-inside:avoid !important;
+  }
 }
 
 </style>
@@ -241,7 +261,7 @@ tfoot td{
 
 <script>
 
-/* LOGIN FIXED */
+/* LOGIN */
 function login(){
  const user=document.getElementById("username").value;
  const pass=document.getElementById("password").value;
@@ -295,140 +315,4 @@ function generateReport(){
    const achievements=String(row["SUBJECT ACHIEVEMENTS"]||"").trim();
    if(!achievements) return;
 
-   const valid=["A","B","C","D","E","X"];
-   const pg=valid.includes(project)?project:"X";
-
-   achievements.split(" ").forEach(item=>{
-     if(!item.includes("-")) return;
-
-     const [subjectRaw,gradeRaw]=item.split("-");
-     const subject=subjectRaw.toUpperCase().trim();
-     const g=valid.includes(gradeRaw)?gradeRaw:"X";
-
-     if(!subjects[subject]){
-       subjects[subject]={sat:0,A:0,B:0,C:0,D:0,E:0,X:0,PA:0,PB:0,PC:0,PD:0,PE:0,PX:0};
-     }
-
-     subjects[subject].sat++;
-     subjects[subject][g]++;
-     subjects[subject]["P"+pg]++;
-
-     if(!gender[subject]){
-       gender[subject]={MA:0,MB:0,MC:0,MD:0,ME:0,FA:0,FB:0,FC:0,FD:0,FE:0};
-     }
-
-     if(sex==="M" && g!=="X") gender[subject]["M"+g]++;
-     if(sex==="F" && g!=="X") gender[subject]["F"+g]++;
-   });
-  });
-
-  renderSubject();
-  renderGender();
- };
-
- reader.readAsArrayBuffer(file);
-}
-
-/* SUBJECT TABLE WITH PROJECT + TOTAL */
-function renderSubject(){
-
- let totals={A:0,B:0,C:0,D:0,E:0};
- let projectTotals={PA:0,PB:0,PC:0,PD:0,PE:0,PX:0};
-
- let h=`<h3 style="text-align:center;">Subject Summary</h3>
- <table>
- <tr>
- <th>Subject</th><th>Sat</th>
- <th>A</th><th>B</th><th>C</th>
- <th>D</th><th>E</th><th>X</th>
- </tr>`;
-
- Object.keys(subjects).forEach(s=>{
-  let x=subjects[s];
-
-  totals.A+=x.A; totals.B+=x.B; totals.C+=x.C;
-  totals.D+=x.D; totals.E+=x.E;
-
-  projectTotals.PA+=x.PA;
-  projectTotals.PB+=x.PB;
-  projectTotals.PC+=x.PC;
-  projectTotals.PD+=x.PD;
-  projectTotals.PE+=x.PE;
-  projectTotals.PX+=x.PX;
-
-  h+=`<tr>
-  <td>${s}</td><td>${x.sat}</td>
-  <td>${x.A}</td><td>${x.B}</td><td>${x.C}</td>
-  <td>${x.D}</td><td>${x.E}</td><td>${x.X}</td>
-  </tr>`;
- });
-
- /* PROJECT ROW */
- h+=`<tr style="font-weight:bold;background:#e0f2fe;">
- <td>PROJECT WORK</td><td></td>
- <td>${projectTotals.PA}</td>
- <td>${projectTotals.PB}</td>
- <td>${projectTotals.PC}</td>
- <td>${projectTotals.PD}</td>
- <td>${projectTotals.PE}</td>
- <td>${projectTotals.PX}</td>
- </tr>`;
-
- /* TOTAL ROW */
- h+=`<tfoot>
- <tr>
- <td>TOTAL (A–E)</td><td></td>
- <td>${totals.A}</td>
- <td>${totals.B}</td>
- <td>${totals.C}</td>
- <td>${totals.D}</td>
- <td>${totals.E}</td>
- <td></td>
- </tr>
- </tfoot></table>`;
-
- subjectSummary.innerHTML=h;
-}
-
-/* GENDER TABLE */
-function renderGender(){
-
- let h=`<h3 style="text-align:center;">Gender Summary</h3>
- <table>
- <tr>
- <th>Subject</th>
- <th>MA</th><th>MB</th><th>MC</th>
- <th>MD</th><th>ME</th>
- <th>FA</th><th>FB</th>
- <th>FC</th><th>FD</th><th>FE</th>
- </tr>`;
-
- Object.keys(gender).forEach(s=>{
-  let g=gender[s];
-  h+=`<tr>
-  <td>${s}</td>
-  <td>${g.MA}</td><td>${g.MB}</td><td>${g.MC}</td>
-  <td>${g.MD}</td><td>${g.ME}</td>
-  <td>${g.FA}</td><td>${g.FB}</td>
-  <td>${g.FC}</td><td>${g.FD}</td><td>${g.FE}</td>
-  </tr>`;
- });
-
- h+=`</table>`;
- genderSummary.innerHTML=h;
-}
-
-function printReport(){ window.print(); }
-
-function downloadPDF(){
- html2pdf().set({
-   margin:10,
-   filename:"UNEB_Report.pdf",
-   html2canvas:{scale:2},
-   jsPDF:{orientation:"landscape"}
- }).from(document.body).save();
-}
-
-</script>
-</body>
-</html>
+   cons
