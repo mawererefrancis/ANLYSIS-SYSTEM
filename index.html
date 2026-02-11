@@ -139,7 +139,7 @@
     .action-bar button:hover { background:#15306b; transform:translateY(-2px); }
     .logout-btn { background:#6b2e1e !important; }
 
-    /* ----- testimonial settings panel (collapsible) ----- */
+    /* ----- testimonial settings panel ----- */
     .settings-toggle {
       background: #f0f4fa;
       border-radius: 20px;
@@ -273,97 +273,186 @@
       .action-bar, .settings-toggle, .settings-panel, #file, #schoolName, #year, button { display:none !important; }
     }
 
-    /* ----- testimonial page style (A4 portrait) ----- */
+    /* ========== TESTIMONIAL PAGE – PERFECTLY BALANCED A4 PORTRAIT ========== */
     .testimonial-page {
       width: 210mm;
       min-height: 297mm;
-      padding: 15mm 15mm;
+      padding: 12mm 15mm 8mm;  /* balanced top/bottom */
       background: white;
-      font-family: 'Times New Roman', serif;
+      font-family: 'Times New Roman', Times, serif;
       margin: 0 auto;
       box-sizing: border-box;
-      border: 1px solid #ddd; /* for preview only */
+      display: flex;
+      flex-direction: column;
+      border: none;
+      position: relative;
     }
+
+    /* header with logos – crisp images */
     .testimonial-header {
       display: flex;
       align-items: center;
       justify-content: space-between;
-      margin-bottom: 10px;
+      margin-bottom: 5px;
     }
     .logo-box {
-      width: 80px;
-      height: 80px;
+      width: 90px;
+      height: 90px;
       display: flex;
       align-items: center;
       justify-content: center;
+      background: #fafbfd;
+      border: 1px solid #ccc;
+      border-radius: 4px;
+      padding: 4px;
+      image-rendering: auto;
     }
-    .logo-box img { max-width: 100%; max-height: 100%; object-fit: contain; }
+    .logo-box img {
+      max-width: 100%;
+      max-height: 100%;
+      object-fit: contain;
+    }
+    .logo-placeholder {
+      font-size: 11px;
+      color: #5a6b7a;
+      text-align: center;
+      text-transform: uppercase;
+      font-weight: 600;
+    }
     .school-info {
       text-align: center;
       flex: 1;
+      margin: 0 8px;
     }
     .school-name-large {
       font-size: 22px;
       font-weight: bold;
       text-transform: uppercase;
-      letter-spacing: 2px;
+      letter-spacing: 1.5px;
+      color: #000;
+      line-height: 1.2;
     }
-    .school-address { font-size: 14px; }
+    .school-address {
+      font-size: 13px;
+      font-weight: 500;
+    }
     .school-vision, .school-mission, .school-motto {
-      font-size: 12px;
+      font-size: 11px;
       font-style: italic;
     }
+
+    /* date – right aligned */
+    .testimonial-date {
+      text-align: right;
+      margin-top: 2px;
+      margin-bottom: 2px;
+      font-size: 13px;
+      font-weight: bold;
+    }
+
+    /* main title */
     .testimonial-title {
       text-align: center;
-      font-size: 20px;
+      font-size: 22px;
       font-weight: bold;
       text-decoration: underline;
-      margin: 20px 0 10px;
+      margin: 12px 0 12px;
+      text-underline-offset: 4px;
     }
+
+    /* candidate details – both on same line */
     .candidate-details {
       display: flex;
-      flex-wrap: wrap;
       justify-content: space-between;
-      font-size: 15px;
-      margin: 15px 0;
+      font-size: 16px;
+      margin: 6px 0 4px;
+      flex-wrap: nowrap;       /* force one line */
+      white-space: nowrap;
     }
+    .candidate-details span {
+      white-space: nowrap;
+    }
+
+    /* LIN row – dotted line fills remaining space */
+    .lin-row {
+      margin: 8px 0 16px;
+      font-size: 16px;
+      display: flex;
+      align-items: baseline;
+      width: 100%;
+    }
+    .lin-label {
+      font-weight: bold;
+      margin-right: 8px;
+      white-space: nowrap;
+    }
+    .lin-dots {
+      flex: 1;
+      border-bottom: 2px dotted #000;
+      margin-left: 4px;
+      height: 1.2em;
+    }
+
+    /* subject table – clean borders, consistent */
     .subject-table {
       width: 100%;
       border-collapse: collapse;
-      margin: 15px 0;
+      margin: 8px 0 15px;
       border: 2px solid #000;
     }
     .subject-table th {
       background: #e6e6e6;
       color: #000;
       border: 1px solid #000;
-      padding: 8px;
+      padding: 7px 4px;
       font-weight: bold;
+      font-size: 14px;
     }
     .subject-table td {
       border: 1px solid #000;
-      padding: 6px;
+      padding: 5px 4px;
+      font-size: 14px;
     }
+
+    /* result & project row – side by side */
     .result-row {
       display: flex;
       justify-content: space-between;
-      font-size: 16px;
+      font-size: 18px;
       font-weight: bold;
-      margin: 20px 0;
+      margin: 5px 0 0;
     }
-    .signature-area {
-      margin-top: 40px;
+
+    /* signature – BOTTOM RIGHT, perfectly aligned */
+    .signature-wrapper {
       display: flex;
       flex-direction: column;
       align-items: flex-end;
+      margin-top: auto;        /* push to bottom */
+      padding-top: 20px;
+      width: 100%;
     }
-    .headteacher-name {
-      font-size: 16px;
+    .signature-line-sign {
+      border-top: 2px solid #000;
+      width: 240px;
+      margin-bottom: 6px;
+    }
+    .signature-name {
+      font-size: 18px;
       font-weight: bold;
       text-transform: uppercase;
+      letter-spacing: 1px;
     }
-    .headteacher-rank {
-      font-size: 14px;
+    .signature-title {
+      font-size: 16px;
+    }
+    .signature-rank {
+      font-size: 16px;
+    }
+
+    /* ensure no unexpected overflow */
+    .testimonial-page > * {
+      flex-shrink: 0;
     }
   </style>
 </head>
@@ -402,7 +491,7 @@
     <button onclick="toggleSettings()" style="background:#2d5a7a;">⚙️ Configure</button>
   </div>
 
-  <!-- Testimonial configuration panel (hidden by default) -->
+  <!-- Testimonial configuration panel -->
   <div id="testimonialSettings" class="settings-panel">
     <div class="setting-group">
       <label>Left Logo</label>
@@ -550,7 +639,7 @@
         <div class="uneb-subhead">UGANDA NATIONAL EXAMINATIONS BOARD · ANALYSIS</div>
       `;
 
-      renderReportPages();  // two separate pages with signatures
+      renderReportPages();
     };
     reader.readAsArrayBuffer(file);
   }
@@ -640,7 +729,7 @@
     XLSX.writeFile(wb, `UNEB_${school.replace(/\s/g,'_')}_${year||'report'}.xlsx`);
   }
 
-  // -------------------- INDIVIDUAL LEARNER TESTIMONIALS – PDF + ZIP (EXACT WORD DOC LAYOUT) --------------------
+  // -------------------- INDIVIDUAL TESTIMONIAL – PERFECTLY BALANCED A4, CRISP IMAGES --------------------
   async function generateTestimonialPDFs() {
     if (!lastLoadedRows || lastLoadedRows.length === 0) {
       alert('Please generate the report first (upload Excel and click GENERATE REPORT)');
@@ -674,7 +763,6 @@
     const zip = new JSZip();
     const folder = zip.folder('Testimonials');
 
-    // Process each learner
     for (const row of lastLoadedRows) {
       const candidateName = row.Candidate_Name || 'Unknown';
       const indexNo = row.IndexNo || '';
@@ -693,12 +781,16 @@
         });
       }
 
-      // build HTML for one testimonial (A4 portrait)
+      // ----- BUILD PERFECTLY BALANCED TESTIMONIAL HTML -----
       const testimonialHTML = `
         <div class="testimonial-page">
           <!-- Header with logos and school info -->
           <div class="testimonial-header">
-            <div class="logo-box">${logoLeftData ? `<img src="${logoLeftData}" alt="School Logo">` : ''}</div>
+            <div class="logo-box">
+              ${logoLeftData 
+                ? `<img src="${logoLeftData}" alt="School Logo" crossorigin="anonymous">` 
+                : `<span class="logo-placeholder">SCHOOL<br>LOGO</span>`}
+            </div>
             <div class="school-info">
               <div class="school-name-large">${settings.schoolName}</div>
               <div class="school-address">${settings.address}  TEL: ${settings.tel1} / ${settings.tel2}</div>
@@ -707,63 +799,103 @@
               <div class="school-mission">MISSION: <em>${settings.mission}</em></div>
               <div class="school-motto">MOTTO: <em>${settings.motto}</em></div>
             </div>
-            <div class="logo-box">${logoRightData ? `<img src="${logoRightData}" alt="School Logo">` : ''}</div>
+            <div class="logo-box">
+              ${logoRightData 
+                ? `<img src="${logoRightData}" alt="School Logo" crossorigin="anonymous">` 
+                : `<span class="logo-placeholder">SCHOOL<br>LOGO</span>`}
+            </div>
           </div>
 
-          <div style="text-align:right; margin-top:10px; font-size:14px;"><strong>DATE:</strong> ${currentDate}</div>
+          <!-- Date (right aligned) -->
+          <div class="testimonial-date"><strong>DATE:</strong> ${currentDate}</div>
+
+          <!-- Testimonial Title -->
           <div class="testimonial-title">NLSC TESTIMONIAL 2026</div>
 
-          <!-- Candidate details -->
+          <!-- Candidate details – both on ONE line -->
           <div class="candidate-details">
             <span><strong>NAME:</strong> ${candidateName}</span>
             <span><strong>INDEX NO:</strong> ${indexNo}</span>
           </div>
-          <div style="margin-bottom:20px;"><strong>LIN:</strong> ..............................................................................</div>
 
-          <!-- Subject table -->
+          <!-- LIN row with dotted line (full width) -->
+          <div class="lin-row">
+            <span class="lin-label"><strong>LIN:</strong></span>
+            <span class="lin-dots"></span>
+          </div>
+
+          <!-- Subject table – even if empty, show placeholder -->
           <table class="subject-table">
             <thead>
-              <tr><th>S/NO</th><th>SUBJECT</th><th>Subject Achievement</th></tr>
+              <tr>
+                <th>S/NO</th>
+                <th>SUBJECT</th>
+                <th>SUBJECT ACHIEVEMENT</th>
+              </tr>
             </thead>
             <tbody>
-              ${subjectsList.map(([sub, grade], idx) => `
-                <tr><td>${idx+1}</td><td>${sub}</td><td style="font-weight:bold;">${grade}</td></tr>
-              `).join('')}
+              ${subjectsList.length > 0 
+                ? subjectsList.map(([sub, grade], idx) => `
+                    <tr>
+                      <td>${idx + 1}</td>
+                      <td>${sub}</td>
+                      <td style="font-weight: bold; text-align: center;">${grade}</td>
+                    </tr>
+                  `).join('')
+                : `<tr><td colspan="3" style="text-align:center; font-style:italic;">No subjects recorded</td></tr>`
+              }
             </tbody>
           </table>
 
-          <!-- Result & Project -->
+          <!-- Result and Project Work -->
           <div class="result-row">
             <span><strong>RESULT:</strong> ${resultOverall}</span>
-            <span><strong>PROJECT:</strong> ${projectGrade}</span>
+            <span><strong>PROJECT WORK:</strong> ${projectGrade}</span>
           </div>
 
-          <!-- Head teacher signature (exactly as in Word doc) -->
-          <div class="signature-area">
-            <div style="border-top:1px solid #000; width:200px; margin-bottom:5px;"></div>
-            <div class="headteacher-name">${settings.htName}</div>
-            <div class="headteacher-rank">${settings.htTitle}</div>
-            <div class="headteacher-rank">${settings.htRank}</div>
+          <!-- Signature block – BOTTOM RIGHT, exactly like Word -->
+          <div class="signature-wrapper">
+            <div class="signature-line-sign"></div>
+            <div class="signature-name">${settings.htName}</div>
+            <div class="signature-title">${settings.htTitle}</div>
+            <div class="signature-rank">${settings.htRank}</div>
           </div>
         </div>
       `;
 
-      // create a temporary container and render PDF
+      // create a temporary container
       const container = document.createElement('div');
       container.innerHTML = testimonialHTML;
-      document.body.appendChild(container); // must be in DOM for html2pdf
+      document.body.appendChild(container);
+
+      // ensure all images are fully loaded
+      const images = container.querySelectorAll('img');
+      await Promise.all(Array.from(images).map(img => {
+        if (img.complete) return Promise.resolve();
+        return new Promise(resolve => { img.onload = resolve; img.onerror = resolve; });
+      }));
+
       try {
+        // HIGH-QUALITY PDF – scale 2.8 for razor-sharp logos and text
         const pdfBlob = await html2pdf().set({
-          margin: [10, 10, 10, 10],
+          margin: [8, 8, 8, 8],     // even margins
           filename: `${candidateName}.pdf`,
-          image: { type: 'jpeg', quality: 0.95 },
-          html2canvas: { scale: 1.2, letterRendering: true, useCORS: true },
+          image: { type: 'jpeg', quality: 0.98 },
+          html2canvas: { 
+            scale: 2.8,            // ultra high resolution for print
+            letterRendering: true, 
+            useCORS: true, 
+            logging: false,
+            allowTaint: false
+          },
           jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' }
         }).from(container).output('blob');
+
         folder.file(`${sanitizeFileName(candidateName)}.pdf`, pdfBlob);
       } catch (err) {
         console.error('PDF generation failed for', candidateName, err);
       }
+
       document.body.removeChild(container);
     }
 
@@ -790,7 +922,7 @@
     return name.replace(/[\\/*?:"<>|]/g, '_').trim();
   }
 
-  // expose functions globally
+  // expose functions
   window.toggleSettings = toggleSettings;
   window.generateTestimonialPDFs = generateTestimonialPDFs;
   window.logout = logout;
