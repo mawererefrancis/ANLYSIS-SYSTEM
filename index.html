@@ -9,6 +9,9 @@
   <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
+  <!-- docx & FileSaver for Word export -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/docx/7.8.2/docx.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/FileSaver.js/2.0.5/FileSaver.min.js"></script>
 
   <style>
     /* ========== RESET & GLOBAL ========== */
@@ -22,7 +25,7 @@
       color: #0a1e3c;
     }
 
-    /* ========== LOGIN – PERFECT CENTERING ========== */
+    /* ========== LOGIN ========== */
     #loginBox {
       background: white;
       width: 90%;
@@ -89,7 +92,6 @@
       padding: 20px 24px;
     }
 
-    /* ----- school header ----- */
     .school-header {
       display: flex;
       flex-wrap: wrap;
@@ -106,7 +108,6 @@
     .exam-year { font-size:1.4rem; font-weight:600; color:#2563eb; background:#e6f0ff; padding:6px 18px; border-radius:60px; }
     .uneb-subhead { text-align:center; font-size:1.2rem; font-weight:500; color:#334155; margin-top:4px; width:100%; }
 
-    /* ----- action bar ----- */
     .action-bar {
       background: white;
       padding: 16px 24px;
@@ -139,7 +140,6 @@
     .action-bar button:hover { background:#15306b; transform:translateY(-2px); }
     .logout-btn { background:#6b2e1e !important; }
 
-    /* ----- testimonial settings panel ----- */
     .settings-toggle {
       background: #f0f4fa;
       border-radius: 20px;
@@ -184,7 +184,7 @@
     }
     .setting-group textarea { min-height: 60px; resize: vertical; }
 
-    /* ----- PROGRESS BAR & LOADER ----- */
+    /* Progress & spinner */
     .progress-container {
       width: 100%;
       background: #eef2f6;
@@ -216,7 +216,6 @@
     }
     @keyframes spin { to { transform: rotate(360deg); } }
 
-    /* ----- print‑page containers (for analytics) ----- */
     .print-page {
       background: white;
       padding: 20px 22px;
@@ -227,7 +226,7 @@
       flex-direction: column;
     }
 
-    /* ----- TABLES – refined, professional ----- */
+    /* analytics tables */
     table {
       width: 100%;
       border-collapse: collapse;
@@ -261,7 +260,6 @@
     }
     .project-row { background: #e6f0ff !important; font-weight:600; }
 
-    /* ----- signature block (analytics) ----- */
     .signature-block {
       margin-top: 24px;
       border-top: 2px dashed #9bb0cc;
@@ -275,7 +273,6 @@
     }
     .signature-line { font-size:13px; font-weight:500; }
 
-    /* ----- summary cards ----- */
     .summary-cards {
       display: flex;
       gap: 24px;
@@ -305,11 +302,11 @@
       .action-bar, .settings-toggle, .settings-panel, #file, #schoolName, #year, button { display:none !important; }
     }
 
-    /* ========== TESTIMONIAL PAGE – ONE PAGE, NO CUTOFF, ELEGANT ========== */
+    /* ========== TESTIMONIAL PAGE – ONE PAGE, NO CUTOFF ========== */
     .testimonial-page {
       width: 210mm;
       min-height: 297mm;
-      padding: 8mm 6mm 6mm;        /* tight, safe margins – no wasted space */
+      padding: 8mm 6mm 6mm;
       background: white;
       font-family: 'Times New Roman', Times, serif;
       margin: 0 auto;
@@ -321,8 +318,6 @@
       box-shadow: 0 0 0 1px #c0d0e0;
       background: linear-gradient(to bottom, #ffffff, #fafdff);
     }
-
-    /* header with logos */
     .testimonial-header {
       display: flex;
       align-items: center;
@@ -334,7 +329,7 @@
       border-radius: 8px 8px 0 0;
     }
     .logo-box {
-      width: 80px;               /* slightly smaller */
+      width: 80px;
       height: 80px;
       display: flex;
       align-items: center;
@@ -364,7 +359,7 @@
       margin: 0 6px;
     }
     .school-name-large {
-      font-size: 22px;          /* reduced */
+      font-size: 22px;
       font-weight: bold;
       text-transform: uppercase;
       letter-spacing: 1.5px;
@@ -382,8 +377,6 @@
       font-style: italic;
       color: #2e475d;
     }
-
-    /* date */
     .testimonial-date {
       text-align: right;
       margin-top: 4px;
@@ -392,21 +385,17 @@
       font-weight: bold;
       color: #1e3a5f;
     }
-
-    /* title */
     .testimonial-title {
       text-align: center;
-      font-size: 24px;          /* reduced */
+      font-size: 24px;
       font-weight: bold;
       text-decoration: underline;
       text-decoration-color: #2563eb;
       text-underline-offset: 5px;
-      margin: 6px 0 10px;       /* less vertical space */
+      margin: 6px 0 10px;
       color: #0b2b5e;
       letter-spacing: 1.5px;
     }
-
-    /* candidate details – one line */
     .candidate-details {
       display: flex;
       justify-content: space-between;
@@ -415,13 +404,9 @@
       flex-wrap: nowrap;
       white-space: nowrap;
     }
-    .candidate-details span {
-      white-space: nowrap;
-    }
-
-    /* LIN row – perfectly centred */
+    .candidate-details span { white-space: nowrap; }
     .lin-row {
-      margin: 6px 0 12px;        /* reduced */
+      margin: 6px 0 12px;
       font-size: 15px;
       display: flex;
       justify-content: center;
@@ -435,17 +420,15 @@
       color: #0b2b5e;
     }
     .lin-dots {
-      width: 220px;            /* narrower – fits perfectly */
+      width: 220px;
       border-bottom: 2px dotted #1e3a5f;
       margin-left: 4px;
       height: 1.2em;
     }
-
-    /* subject table – compact yet readable */
     .subject-table {
       width: 100%;
       border-collapse: collapse;
-      margin: 4px 0 12px;       /* reduced */
+      margin: 4px 0 12px;
       border: 2px solid #1e3a5f;
       box-shadow: 0 4px 8px rgba(0,0,0,0.04);
     }
@@ -453,41 +436,35 @@
       background: linear-gradient(to bottom, #2563eb, #1e3a8a);
       color: white;
       border: 1px solid #0b2b5e;
-      padding: 6px 3px;         /* compact */
+      padding: 6px 3px;
       font-weight: bold;
-      font-size: 12px;         /* reduced */
+      font-size: 12px;
       text-transform: uppercase;
       letter-spacing: 0.5px;
     }
     .subject-table td {
       border: 1px solid #5f7d9c;
       padding: 5px 3px;
-      font-size: 12px;         /* reduced */
+      font-size: 12px;
       background-color: #fdfdfe;
     }
-    .subject-table tr:nth-child(even) td {
-      background-color: #f4f9ff;
-    }
-
-    /* result & project row */
+    .subject-table tr:nth-child(even) td { background-color: #f4f9ff; }
     .result-row {
       display: flex;
       justify-content: space-between;
-      font-size: 16px;         /* reduced */
+      font-size: 16px;
       font-weight: bold;
-      margin: 6px 0 15px;      /* space before signature */
+      margin: 6px 0 15px;
       color: #0b2b5e;
       padding: 6px 14px;
       background: #eaf0fa;
       border-radius: 40px;
     }
-
-    /* signature – elevated, not touching bottom */
     .signature-wrapper {
       display: flex;
       flex-direction: column;
       align-items: flex-end;
-      margin-top: 15px;        /* fixed, not auto */
+      margin-top: 15px;
       width: 100%;
     }
     .signature-inner {
@@ -498,7 +475,7 @@
     }
     .signature-line-sign {
       border-top: 2px solid #0b2b5e;
-      width: 220px;           /* slightly narrower */
+      width: 220px;
       margin-bottom: 5px;
     }
     .signature-name {
@@ -508,17 +485,11 @@
       letter-spacing: 1px;
       color: #0b2b5e;
     }
-    .signature-title {
-      font-size: 14px;
-    }
-    .signature-rank {
-      font-size: 14px;
-    }
+    .signature-title, .signature-rank { font-size: 14px; }
   </style>
 </head>
 <body>
 
-<!-- ============ LOGIN – perfectly centered ============ -->
 <div id="loginBox">
   <h2>📊 UNEB</h2>
   <input id="username" placeholder="Username" value="admin">
@@ -528,12 +499,10 @@
   <div style="margin-top: 12px; color: #4a6479; font-size: 0.85rem;">use admin / 1234</div>
 </div>
 
-<!-- ============ MAIN APPLICATION ============ -->
 <div id="app">
 
   <div id="schoolHeaderContainer" class="school-header"></div>
 
-  <!-- main action bar -->
   <div class="action-bar">
     <input id="schoolName" placeholder="School name" value="MAWERERE MEMORIAL SCHOOL">
     <input id="year" placeholder="Year" value="2025">
@@ -545,13 +514,11 @@
     <button class="logout-btn" onclick="logout()"><span>🚪</span> LOGOUT</button>
   </div>
 
-  <!-- Testimonial settings toggle -->
   <div class="settings-toggle">
     <span style="font-weight:600;">📜 TESTIMONIAL SETTINGS</span>
     <button onclick="toggleSettings()" style="background:#2d5a7a;">⚙️ Configure</button>
   </div>
 
-  <!-- Testimonial configuration panel -->
   <div id="testimonialSettings" class="settings-panel">
     <div class="setting-group">
       <label>Left Logo</label>
@@ -606,9 +573,12 @@
       <input type="text" id="htRank" value="HEAD TEACHER">
     </div>
     <div style="flex:1 1 100%; display:flex; flex-direction:column; gap:12px;">
-      <div style="display:flex; justify-content:flex-end;">
+      <div style="display:flex; gap:16px; justify-content:flex-end; flex-wrap:wrap;">
         <button id="generateTestimonialBtn" onclick="generateTestimonialPDFs()" style="background:#0f5c4b; padding:14px 32px;">
           📦 GENERATE TESTIMONIALS (ZIP / PDF)
+        </button>
+        <button id="generateWordBtn" onclick="generateTestimonialWord()" style="background:#1e5f7a; padding:14px 32px;">
+          📄 GENERATE TESTIMONIALS (WORD)
         </button>
       </div>
       <div id="progressContainer" class="progress-container">
@@ -617,16 +587,14 @@
     </div>
   </div>
 
-  <!-- REPORT AREA – analytics tables -->
   <div id="reportArea"></div>
-
 </div>
 
 <script>
-  // -------------------- GLOBAL DATA (COUNTING LOGIC – PROJECT WORK ACCURATE, SUBJECT/GENDER UNCHANGED) --------------------
+  // -------------------- GLOBAL DATA (COUNTING LOGIC – ACCURATE PROJECT) --------------------
   let subjects = {};   
   let gender = {};    
-  let projectTotals = { PA:0, PB:0, PC:0, PD:0, PE:0, PX:0 };   // per-candidate project counts
+  let projectTotals = { PA:0, PB:0, PC:0, PD:0, PE:0, PX:0 };
   let lastLoadedRows = null;
 
   // -------------------- LOGIN / LOGOUT --------------------
@@ -646,12 +614,11 @@
     loginError.innerText = "";
   }
 
-  // -------------------- TOGGLE TESTIMONIAL SETTINGS --------------------
   function toggleSettings() {
     document.getElementById('testimonialSettings').classList.toggle('show');
   }
 
-  // -------------------- GENERATE REPORT – ACCURATE PROJECT COUNTS, ORIGINAL SUBJECT/GENDER LOGIC --------------------
+  // -------------------- GENERATE REPORT – ACCURATE PROJECT COUNTS --------------------
   function generateReport() {
     const file = document.getElementById('file').files[0];
     if (!file) { alert('Please select the UNEB Excel annex'); return; }
@@ -662,7 +629,6 @@
       const rows = XLSX.utils.sheet_to_json(wb.Sheets[wb.SheetNames[0]]);
       lastLoadedRows = rows;
 
-      // reset
       subjects = {};
       gender = {};
       projectTotals = { PA:0, PB:0, PC:0, PD:0, PE:0, PX:0 };
@@ -676,10 +642,9 @@
         const validGrades = ['A','B','C','D','E','X'];
         const pg = validGrades.includes(project) ? project : 'X';
         
-        // --- PER-CANDIDATE PROJECT COUNT (ACCURATE) ---
+        // per-candidate project count (accurate)
         projectTotals['P' + pg]++;
 
-        // --- SUBJECT & GENDER COUNTS (ORIGINAL, UNCHANGED) ---
         achievements.split(' ').forEach(item => {
           if (!item.includes('-')) return;
           const [subjectRaw, gradeRaw] = item.split('-');
@@ -700,7 +665,6 @@
         });
       });
 
-      // school header
       const schoolName = document.getElementById('schoolName').value || 'SCHOOL NAME';
       const year = document.getElementById('year').value || '';
       document.getElementById('schoolHeaderContainer').innerHTML = `
@@ -714,7 +678,6 @@
     reader.readAsArrayBuffer(file);
   }
 
-  // -------------------- RENDER SUBJECT TABLE (with CORRECT project totals) --------------------
   function buildSubjectTableHTML() {
     let totals = { A:0, B:0, C:0, D:0, E:0 };
     let html = `<h3 style="color:#0a2c4e; border-left:6px solid #2563eb; padding-left:12px; margin-bottom:6px;">📋 TABLE 1: SUBJECT PERFORMANCE SUMMARY</h3>`;
@@ -732,7 +695,6 @@
         <td>${x.E}</td><td>${p('E')}%</td><td>${x.X}</td></tr>`;
     });
 
-    // ----- PROJECT WORK row – using global projectTotals (ACCURATE) -----
     html += `<tr class="project-row"><td></td><td>📌 PROJECT WORK</td><td></td>
       <td>${projectTotals.PA}</td><td></td><td>${projectTotals.PB}</td><td></td>
       <td>${projectTotals.PC}</td><td></td><td>${projectTotals.PD}</td><td></td>
@@ -743,7 +705,6 @@
       <td>${totals.C}</td><td></td><td>${totals.D}</td><td></td>
       <td>${totals.E}</td><td></td><td></td></tr></tfoot></table>`;
 
-    // analytics cards
     let totalA = 0, totalSat = 0;
     Object.values(subjects).forEach(x => { totalA += x.A; totalSat += x.sat; });
     let mean = totalSat ? (totalA / totalSat * 100) : 0;
@@ -752,7 +713,6 @@
     return html;
   }
 
-  // -------------------- RENDER GENDER TABLE (unchanged) --------------------
   function buildGenderTableHTML() {
     let grand = { MA:0, MB:0, MC:0, MD:0, ME:0, FA:0, FB:0, FC:0, FD:0, FE:0 };
     let html = `<h3 style="color:#0a2c4e; border-left:6px solid #2563eb; padding-left:12px; margin-bottom:6px;">⚥ TABLE 2: GENDER DISTRIBUTION BY SUBJECT</h3>`;
@@ -768,19 +728,16 @@
     return html;
   }
 
-  // -------------------- SIGNATURE BLOCK (for analytics pages) --------------------
   function buildSignatureBlock() {
     return `<div class="signature-block"><div class="signature-line"><span style="font-weight:700;">Signature:</span> ___________________________________<br><span style="font-size:12px; color:#2d4968;">Mawerere Francis · In charge Students Data</span></div><div class="signature-contact">📞 0788222315 &nbsp; ✉️ mawererefrancis@gmail.com</div></div>`;
   }
 
-  // -------------------- RENDER TWO PAGES --------------------
   function renderReportPages() {
     let html = `<div class="print-page">${buildSubjectTableHTML()}${buildSignatureBlock()}</div>`;
     html += `<div class="print-page">${buildGenderTableHTML()}${buildSignatureBlock()}</div>`;
     document.getElementById('reportArea').innerHTML = html;
   }
 
-  // -------------------- PRINT / PDF / EXCEL (unchanged) --------------------
   function printReport() { window.print(); }
   function downloadPDF() {
     const element = document.getElementById('reportArea');
@@ -797,24 +754,24 @@
     XLSX.writeFile(wb, `UNEB_${school.replace(/\s/g,'_')}_${year||'report'}.xlsx`);
   }
 
-  // -------------------- BATCH TESTIMONIAL GENERATION – ONE PAGE, SAFE MARGINS, NO FREEZE --------------------
+  // -------------------- ROBUST PDF GENERATION – HANDLES 500+ --------------------
   async function generateTestimonialPDFs() {
     if (!lastLoadedRows || lastLoadedRows.length === 0) {
       alert('Please generate the report first (upload Excel and click GENERATE REPORT)');
       return;
     }
 
-    // Disable button and show progress
     const generateBtn = document.getElementById('generateTestimonialBtn');
+    const wordBtn = document.getElementById('generateWordBtn');
     generateBtn.disabled = true;
-    generateBtn.innerHTML = '<span class="spinner"></span> GENERATING...';
+    wordBtn.disabled = true;
+    generateBtn.innerHTML = '<span class="spinner"></span> GENERATING PDFs...';
     const progressContainer = document.getElementById('progressContainer');
     const progressBar = document.getElementById('progressBar');
     progressContainer.style.display = 'block';
     progressBar.style.width = '0%';
     progressBar.innerText = '0%';
 
-    // read logo files
     const logoLeftFile = document.getElementById('logoLeft').files[0];
     const logoRightFile = document.getElementById('logoRight').files[0];
     let logoLeftData = null, logoRightData = null;
@@ -841,7 +798,7 @@
     const folder = zip.folder('Testimonials');
 
     const total = lastLoadedRows.length;
-    const batchSize = 15;
+    const batchSize = 8;      // smaller batches to avoid memory overload
     let processed = 0;
 
     for (let i = 0; i < total; i += batchSize) {
@@ -864,15 +821,10 @@
           });
         }
 
-        // ----- ONE‑PAGE TESTIMONIAL HTML (COMPACT, SAFE MARGINS) -----
         const testimonialHTML = `
           <div class="testimonial-page">
             <div class="testimonial-header">
-              <div class="logo-box">
-                ${logoLeftData 
-                  ? `<img src="${logoLeftData}" alt="School Logo" crossorigin="anonymous">` 
-                  : `<span class="logo-placeholder">SCHOOL<br>LOGO</span>`}
-              </div>
+              <div class="logo-box">${logoLeftData ? `<img src="${logoLeftData}" alt="Logo">` : '<span class="logo-placeholder">SCHOOL<br>LOGO</span>'}</div>
               <div class="school-info">
                 <div class="school-name-large">${settings.schoolName}</div>
                 <div class="school-address">${settings.address}  TEL: ${settings.tel1} / ${settings.tel2}</div>
@@ -881,45 +833,30 @@
                 <div class="school-mission">MISSION: <em>${settings.mission}</em></div>
                 <div class="school-motto">MOTTO: <em>${settings.motto}</em></div>
               </div>
-              <div class="logo-box">
-                ${logoRightData 
-                  ? `<img src="${logoRightData}" alt="School Logo" crossorigin="anonymous">` 
-                  : `<span class="logo-placeholder">SCHOOL<br>LOGO</span>`}
-              </div>
+              <div class="logo-box">${logoRightData ? `<img src="${logoRightData}" alt="Logo">` : '<span class="logo-placeholder">SCHOOL<br>LOGO</span>'}</div>
             </div>
-
             <div class="testimonial-date"><strong>DATE:</strong> ${currentDate}</div>
             <div class="testimonial-title">NLSC TESTIMONIAL 2026</div>
-
             <div class="candidate-details">
               <span><strong>NAME:</strong> ${candidateName}</span>
               <span><strong>INDEX NO:</strong> ${indexNo}</span>
             </div>
-
             <div class="lin-row">
               <span class="lin-label"><strong>LIN:</strong></span>
               <span class="lin-dots"></span>
             </div>
-
             <table class="subject-table">
-              <thead>
-                <tr><th>S/NO</th><th>SUBJECT</th><th>SUBJECT ACHIEVEMENT</th></tr>
-              </thead>
+              <thead><tr><th>S/NO</th><th>SUBJECT</th><th>SUBJECT ACHIEVEMENT</th></tr></thead>
               <tbody>
                 ${subjectsList.length > 0 
-                  ? subjectsList.map(([sub, grade], idx) => `
-                      <tr><td>${idx + 1}</td><td>${sub}</td><td style="font-weight: bold; text-align: center;">${grade}</td></tr>
-                    `).join('')
-                  : `<tr><td colspan="3" style="text-align:center; font-style:italic;">No subjects recorded</td></tr>`
-                }
+                  ? subjectsList.map(([sub, grade], idx) => `<tr><td>${idx+1}</td><td>${sub}</td><td style="font-weight:bold; text-align:center;">${grade}</td></tr>`).join('')
+                  : `<tr><td colspan="3" style="text-align:center; font-style:italic;">No subjects recorded</td></tr>`}
               </tbody>
             </table>
-
             <div class="result-row">
               <span><strong>RESULT:</strong> ${resultOverall}</span>
               <span><strong>PROJECT WORK:</strong> ${projectGrade}</span>
             </div>
-
             <div class="signature-wrapper">
               <div class="signature-inner">
                 <div class="signature-line-sign"></div>
@@ -935,31 +872,28 @@
         container.innerHTML = testimonialHTML;
         document.body.appendChild(container);
 
+        // Safe image loading with timeout
         const images = container.querySelectorAll('img');
         await Promise.all(Array.from(images).map(img => {
           if (img.complete) return Promise.resolve();
-          return new Promise(resolve => { img.onload = resolve; img.onerror = resolve; });
+          return Promise.race([
+            new Promise(resolve => { img.onload = resolve; img.onerror = resolve; }),
+            new Promise(resolve => setTimeout(resolve, 2000)) // timeout 2s
+          ]);
         }));
 
         try {
-          // REDUCED MARGINS – 8mm all around, internal padding already set
           const pdfBlob = await html2pdf().set({
-            margin: [8, 8, 8, 8],      // safe, no cutoff
+            margin: [8, 8, 8, 8],
             filename: `${candidateName}.pdf`,
-            image: { type: 'jpeg', quality: 0.98 },
-            html2canvas: { 
-              scale: 3.0,
-              letterRendering: true, 
-              useCORS: true, 
-              logging: false,
-              allowTaint: false
-            },
+            image: { type: 'jpeg', quality: 0.95 },
+            html2canvas: { scale: 2.2, letterRendering: true, useCORS: true, logging: false, allowTaint: false },
             jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' }
           }).from(container).output('blob');
 
           folder.file(`${sanitizeFileName(candidateName)}.pdf`, pdfBlob);
         } catch (err) {
-          console.error('PDF generation failed for', candidateName, err);
+          console.error(`PDF failed for ${candidateName}:`, err);
         }
 
         document.body.removeChild(container);
@@ -969,24 +903,161 @@
         progressBar.style.width = percent + '%';
         progressBar.innerText = percent + '%';
         
-        if (processed % 3 === 0) {
-          await new Promise(resolve => setTimeout(resolve, 5));
-        }
+        if (processed % 3 === 0) await new Promise(resolve => setTimeout(resolve, 10));
       }
-      await new Promise(resolve => setTimeout(resolve, 10));
+      await new Promise(resolve => setTimeout(resolve, 20));
     }
 
     const zipBlob = await zip.generateAsync({ type: 'blob' });
-    const zipLink = document.createElement('a');
-    zipLink.href = URL.createObjectURL(zipBlob);
-    zipLink.download = `Testimonials_${settings.schoolName.replace(/\s/g,'_')}_${new Date().getTime()}.zip`;
-    zipLink.click();
+    saveAs(zipBlob, `Testimonials_${settings.schoolName.replace(/\s/g,'_')}_${Date.now()}.zip`);
 
     generateBtn.disabled = false;
+    wordBtn.disabled = false;
     generateBtn.innerHTML = '📦 GENERATE TESTIMONIALS (ZIP / PDF)';
     progressContainer.style.display = 'none';
   }
 
+  // -------------------- NEW: WORD DOCUMENT (ALL TESTIMONIALS IN ONE FILE) --------------------
+  async function generateTestimonialWord() {
+    if (!lastLoadedRows || lastLoadedRows.length === 0) {
+      alert('Please generate the report first (upload Excel and click GENERATE REPORT)');
+      return;
+    }
+
+    const generateBtn = document.getElementById('generateWordBtn');
+    const pdfBtn = document.getElementById('generateTestimonialBtn');
+    generateBtn.disabled = true;
+    pdfBtn.disabled = true;
+    generateBtn.innerHTML = '<span class="spinner"></span> GENERATING WORD...';
+    const progressContainer = document.getElementById('progressContainer');
+    const progressBar = document.getElementById('progressBar');
+    progressContainer.style.display = 'block';
+    progressBar.style.width = '0%';
+    progressBar.innerText = '0%';
+
+    const settings = {
+      schoolName: document.getElementById('testSchoolName').value || 'RUBONGI ARMY SECONDARY SCHOOL',
+      address: document.getElementById('schoolAddress').value || 'P.O.BOX 698 TORORO',
+      tel1: document.getElementById('tel1').value || '0782651148',
+      tel2: document.getElementById('tel2').value || '0788222315',
+      website: document.getElementById('website').value || 'www.rubongiarmy.sc.ug',
+      vision: document.getElementById('vision').value || 'To produce a morally upright and self reliant future generation.',
+      mission: document.getElementById('mission').value || 'To provide affordable quality education to our community',
+      motto: document.getElementById('motto').value || 'Discipline, Excellence, Service',
+      htName: document.getElementById('htName').value || 'ZAINA .K. NALUKENGE',
+      htTitle: document.getElementById('htTitle').value || 'Maj.',
+      htRank: document.getElementById('htRank').value || 'HEAD TEACHER'
+    };
+
+    const currentDate = new Date().toLocaleDateString('en-GB', { day:'2-digit', month:'2-digit', year:'numeric' });
+
+    // Prepare document sections
+    const { Document, Packer, Paragraph, Table, TableRow, TableCell, Border, WidthType, AlignmentType, PageBreak } = docx;
+
+    const children = [];
+
+    for (let i = 0; i < lastLoadedRows.length; i++) {
+      const row = lastLoadedRows[i];
+      const candidateName = row.Candidate_Name || 'Unknown';
+      const indexNo = row.IndexNo || '';
+      const resultOverall = row.Result || '';
+      const projectGrade = row['PROJECT WORK'] || 'X';
+      const achievements = String(row['SUBJECT ACHIEVEMENTS'] || '').trim();
+
+      const subjectsList = [];
+      if (achievements) {
+        achievements.split(' ').forEach(item => {
+          if (item.includes('-')) {
+            let [sub, grad] = item.split('-');
+            subjectsList.push([sub.trim(), grad.trim()]);
+          }
+        });
+      }
+
+      // --- School header (simplified for Word) ---
+      children.push(
+        new Paragraph({ text: settings.schoolName, heading: 'Heading1', alignment: AlignmentType.CENTER }),
+        new Paragraph({ text: `${settings.address}  TEL: ${settings.tel1} / ${settings.tel2}`, alignment: AlignmentType.CENTER }),
+        new Paragraph({ text: settings.website, alignment: AlignmentType.CENTER }),
+        new Paragraph({ text: `VISION: ${settings.vision}`, alignment: AlignmentType.CENTER }),
+        new Paragraph({ text: `MISSION: ${settings.mission}`, alignment: AlignmentType.CENTER }),
+        new Paragraph({ text: `MOTTO: ${settings.motto}`, alignment: AlignmentType.CENTER }),
+        new Paragraph({ text: `DATE: ${currentDate}`, alignment: AlignmentType.RIGHT }),
+        new Paragraph({ text: 'NLSC TESTIMONIAL 2026', heading: 'Heading2', alignment: AlignmentType.CENTER, underline: { type: 'single' } }),
+        new Paragraph({ text: `NAME: ${candidateName}     INDEX NO: ${indexNo}` }),
+        new Paragraph({ text: 'LIN: __________________________________________________________________' }),
+        new Paragraph('')
+      );
+
+      // Subject table
+      const tableRows = [
+        new TableRow({
+          children: [
+            new TableCell({ children: [new Paragraph('S/NO')], borders: {...allBorders} }),
+            new TableCell({ children: [new Paragraph('SUBJECT')], borders: {...allBorders} }),
+            new TableCell({ children: [new Paragraph('SUBJECT ACHIEVEMENT')], borders: {...allBorders} })
+          ]
+        })
+      ];
+
+      subjectsList.forEach(([sub, grade], idx) => {
+        tableRows.push(new TableRow({
+          children: [
+            new TableCell({ children: [new Paragraph((idx+1).toString())], borders: {...allBorders} }),
+            new TableCell({ children: [new Paragraph(sub)], borders: {...allBorders} }),
+            new TableCell({ children: [new Paragraph({ text: grade, bold: true })], borders: {...allBorders} })
+          ]
+        }));
+      });
+
+      if (subjectsList.length === 0) {
+        tableRows.push(new TableRow({
+          children: [
+            new TableCell({ children: [new Paragraph('No subjects recorded')], columnSpan: 3, borders: {...allBorders} })
+          ]
+        }));
+      }
+
+      children.push(
+        new Table({ rows: tableRows, width: { size: 100, type: WidthType.PERCENTAGE } }),
+        new Paragraph(''),
+        new Paragraph({ text: `RESULT: ${resultOverall}     PROJECT WORK: ${projectGrade}`, alignment: AlignmentType.BOTH }),
+        new Paragraph(''),
+        new Paragraph({ text: settings.htName, alignment: AlignmentType.RIGHT, bold: true }),
+        new Paragraph({ text: settings.htTitle, alignment: AlignmentType.RIGHT }),
+        new Paragraph({ text: settings.htRank, alignment: AlignmentType.RIGHT })
+      );
+
+      // Page break after each testimonial except last
+      if (i < lastLoadedRows.length - 1) {
+        children.push(new Paragraph({ children: [new PageBreak()] }));
+      }
+
+      // update progress
+      const percent = Math.round(((i+1) / lastLoadedRows.length) * 100);
+      progressBar.style.width = percent + '%';
+      progressBar.innerText = percent + '%';
+      await new Promise(resolve => setTimeout(resolve, 5));
+    }
+
+    const allBorders = {
+      top: { style: BorderStyle.SINGLE, size: 1, color: '000000' },
+      bottom: { style: BorderStyle.SINGLE, size: 1, color: '000000' },
+      left: { style: BorderStyle.SINGLE, size: 1, color: '000000' },
+      right: { style: BorderStyle.SINGLE, size: 1, color: '000000' }
+    };
+
+    const doc = new Document({ sections: [{ properties: {}, children }] });
+    const blob = await Packer.toBlob(doc);
+    saveAs(blob, `Testimonials_${settings.schoolName.replace(/\s/g,'_')}_${Date.now()}.docx`);
+
+    generateBtn.disabled = false;
+    pdfBtn.disabled = false;
+    generateBtn.innerHTML = '📄 GENERATE TESTIMONIALS (WORD)';
+    progressContainer.style.display = 'none';
+  }
+
+  // helpers
   function readFileAsDataURL(file) {
     return new Promise((resolve, reject) => {
       const reader = new FileReader();
@@ -1002,8 +1073,8 @@
 
   window.toggleSettings = toggleSettings;
   window.generateTestimonialPDFs = generateTestimonialPDFs;
+  window.generateTestimonialWord = generateTestimonialWord;
   window.logout = logout;
 </script>
-
 </body>
 </html>
