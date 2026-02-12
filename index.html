@@ -184,7 +184,7 @@
     }
     .setting-group textarea { min-height: 60px; resize: vertical; }
 
-    /* ----- PROGRESS BAR for testimonial generation ----- */
+    /* ----- PROGRESS BAR & LOADER ----- */
     .progress-container {
       width: 100%;
       background: #eef2f6;
@@ -204,6 +204,17 @@
       text-align: center;
       line-height: 20px;
     }
+    .spinner {
+      display: inline-block;
+      width: 16px;
+      height: 16px;
+      border: 2px solid rgba(255,255,255,0.3);
+      border-radius: 50%;
+      border-top-color: white;
+      animation: spin 0.8s linear infinite;
+      margin-right: 8px;
+    }
+    @keyframes spin { to { transform: rotate(360deg); } }
 
     /* ----- print‑page containers (for analytics) ----- */
     .print-page {
@@ -216,7 +227,7 @@
       flex-direction: column;
     }
 
-    /* ----- TABLES – centered, with lines ----- */
+    /* ----- TABLES – refined, professional ----- */
     table {
       width: 100%;
       border-collapse: collapse;
@@ -228,7 +239,7 @@
       background: #0a2c4e;
       color: white;
       font-weight: 600;
-      padding: 10px 4px;
+      padding: 10px 6px;
       text-transform: uppercase;
       letter-spacing: 0.5px;
       font-size: 12px;
@@ -237,7 +248,7 @@
       border: 1px solid #b0c4ce;
     }
     td {
-      padding: 8px 4px;
+      padding: 8px 6px;
       border: 1px solid #b0c4ce;
       text-align: center;
       vertical-align: middle;
@@ -283,7 +294,7 @@
 
     /* ========== PRINT / PDF – A4 LANDSCAPE for analytics ========== */
     @media print {
-      @page { size: A4 landscape; margin: 10mm 12mm 8mm 12mm; }
+      @page { size: A4 landscape; margin: 12mm 12mm 10mm 12mm; }
       body, #app, .report-box { background:white; margin:0; padding:0; }
       .print-page { page-break-after: always; box-shadow:none; border-radius:0; padding:5px 10px; margin:0; display:flex; flex-direction:column; min-height:100%; }
       .print-page:last-child { page-break-after: avoid; }
@@ -294,23 +305,24 @@
       .action-bar, .settings-toggle, .settings-panel, #file, #schoolName, #year, button { display:none !important; }
     }
 
-    /* ========== TESTIMONIAL PAGE – PROFESSIONAL, COLOR-ENHANCED, PERFECTLY BALANCED ========== */
+    /* ========== TESTIMONIAL PAGE – PERFECT MARGINS, ELEGANT DESIGN ========== */
     .testimonial-page {
       width: 210mm;
       min-height: 297mm;
-      padding: 10mm 12mm 8mm;
+      padding: 12mm 12mm 8mm;   /* safe margins – no cut-off */
       background: white;
       font-family: 'Times New Roman', Times, serif;
       margin: 0 auto;
       box-sizing: border-box;
       display: flex;
       flex-direction: column;
-      border: 4px double #1e3a5f;      /* elegant double border */
-      border-radius: 8px;              /* subtle rounding */
-      box-shadow: 0 0 0 1px #c0d0e0;   /* soft outer border */
+      border: 4px double #1e3a5f;
+      border-radius: 10px;
+      box-shadow: 0 0 0 1px #c0d0e0;
+      background: linear-gradient(to bottom, #ffffff, #fafdff);
     }
 
-    /* header with logos – crisp images */
+    /* header with logos */
     .testimonial-header {
       display: flex;
       align-items: center;
@@ -319,6 +331,7 @@
       background: linear-gradient(to right, #eef7ff, #ffffff);
       padding: 8px 10px;
       border-bottom: 3px solid #2563eb;
+      border-radius: 8px 8px 0 0;
     }
     .logo-box {
       width: 90px;
@@ -328,10 +341,10 @@
       justify-content: center;
       background: white;
       border: 1px solid #aac7e0;
-      border-radius: 6px;
+      border-radius: 8px;
       padding: 4px;
       image-rendering: auto;
-      box-shadow: 0 2px 4px rgba(0,0,0,0.04);
+      box-shadow: 0 2px 6px rgba(0,0,0,0.04);
     }
     .logo-box img {
       max-width: 100%;
@@ -370,7 +383,7 @@
       color: #2e475d;
     }
 
-    /* date – right aligned */
+    /* date */
     .testimonial-date {
       text-align: right;
       margin-top: 6px;
@@ -380,7 +393,7 @@
       color: #1e3a5f;
     }
 
-    /* main title */
+    /* title */
     .testimonial-title {
       text-align: center;
       font-size: 26px;
@@ -393,27 +406,25 @@
       letter-spacing: 2px;
     }
 
-    /* candidate details – both on ONE line, left-aligned consistently */
+    /* candidate details – one line */
     .candidate-details {
       display: flex;
       justify-content: space-between;
       font-size: 16px;
-      margin: 6px 0 4px;
+      margin: 6px 10px 4px;
       flex-wrap: nowrap;
       white-space: nowrap;
-      padding-left: 10px;   /* align left edge */
-      padding-right: 10px;
     }
     .candidate-details span {
       white-space: nowrap;
     }
 
-    /* LIN row – centred horizontally */
+    /* LIN row – perfectly centred */
     .lin-row {
       margin: 10px 0 20px;
       font-size: 16px;
       display: flex;
-      justify-content: center;   /* centre the whole group */
+      justify-content: center;
       align-items: baseline;
       width: 100%;
     }
@@ -424,19 +435,19 @@
       color: #0b2b5e;
     }
     .lin-dots {
-      width: 250px;            /* fixed width for perfect centering */
+      width: 260px;
       border-bottom: 2px dotted #1e3a5f;
       margin-left: 4px;
       height: 1.2em;
     }
 
-    /* subject table – clean borders, professional header */
+    /* subject table – refined */
     .subject-table {
       width: 100%;
       border-collapse: collapse;
       margin: 8px 0 20px;
       border: 2px solid #1e3a5f;
-      box-shadow: 0 4px 6px rgba(0,0,0,0.03);
+      box-shadow: 0 4px 8px rgba(0,0,0,0.04);
     }
     .subject-table th {
       background: linear-gradient(to bottom, #2563eb, #1e3a8a);
@@ -458,32 +469,31 @@
       background-color: #f4f9ff;
     }
 
-    /* result & project row – side by side, bold */
+    /* result & project row */
     .result-row {
       display: flex;
       justify-content: space-between;
       font-size: 18px;
       font-weight: bold;
-      margin: 10px 0 5px;
+      margin: 10px 0 25px;      /* space before signature */
       color: #0b2b5e;
-      padding: 8px 10px;
+      padding: 8px 16px;
       background: #eaf0fa;
       border-radius: 50px;
     }
 
-    /* signature – BOTTOM RIGHT, left-aligned text inside the block */
+    /* signature – perfectly positioned, not too low */
     .signature-wrapper {
       display: flex;
       flex-direction: column;
-      align-items: flex-end;   /* pushes block to the right */
-      margin-top: auto;
-      padding-top: 20px;
+      align-items: flex-end;
+      margin-top: 25px;          /* fixed distance from result row */
       width: 100%;
     }
     .signature-inner {
       display: flex;
       flex-direction: column;
-      align-items: flex-start; /* text inside is left-aligned */
+      align-items: flex-start;
       width: fit-content;
     }
     .signature-line-sign {
@@ -595,10 +605,9 @@
       <label>Head Rank</label>
       <input type="text" id="htRank" value="HEAD TEACHER">
     </div>
-    <!-- Progress indicator & batch generation -->
     <div style="flex:1 1 100%; display:flex; flex-direction:column; gap:12px;">
       <div style="display:flex; justify-content:flex-end;">
-        <button onclick="generateTestimonialPDFs()" style="background:#0f5c4b; padding:14px 32px;">
+        <button id="generateTestimonialBtn" onclick="generateTestimonialPDFs()" style="background:#0f5c4b; padding:14px 32px;">
           📦 GENERATE TESTIMONIALS (ZIP / PDF)
         </button>
       </div>
@@ -608,17 +617,17 @@
     </div>
   </div>
 
-  <!-- REPORT AREA – analytics tables (separate pages) -->
+  <!-- REPORT AREA – analytics tables -->
   <div id="reportArea"></div>
 
 </div>
 
 <script>
-  // -------------------- GLOBAL DATA (COUNTING LOGIC – PROJECT WORK FIXED, ELSE UNCHANGED) --------------------
-  let subjects = {};   // per subject: sat, A,B,C,D,E,X
-  let gender = {};    // per subject: MA,MB,MC,MD,ME, FA,FB,FC,FD,FE
-  let projectTotals = { PA:0, PB:0, PC:0, PD:0, PE:0, PX:0 };   // NEW: global project counts
-  let lastLoadedRows = null;   // raw rows for testimonial export
+  // -------------------- GLOBAL DATA (COUNTING LOGIC – PROJECT WORK FIXED, ACCURATE) --------------------
+  let subjects = {};   
+  let gender = {};    
+  let projectTotals = { PA:0, PB:0, PC:0, PD:0, PE:0, PX:0 };   // per-candidate project counts
+  let lastLoadedRows = null;
 
   // -------------------- LOGIN / LOGOUT --------------------
   function login() {
@@ -642,7 +651,7 @@
     document.getElementById('testimonialSettings').classList.toggle('show');
   }
 
-  // -------------------- GENERATE REPORT – COUNTING LOGIC: PROJECT WORK FIXED, ELSE ORIGINAL --------------------
+  // -------------------- GENERATE REPORT – ACCURATE PROJECT COUNTS, ORIGINAL SUBJECT/GENDER LOGIC --------------------
   function generateReport() {
     const file = document.getElementById('file').files[0];
     if (!file) { alert('Please select the UNEB Excel annex'); return; }
@@ -653,10 +662,10 @@
       const rows = XLSX.utils.sheet_to_json(wb.Sheets[wb.SheetNames[0]]);
       lastLoadedRows = rows;
 
-      // ----- reset (original logic for subjects/gender, plus new projectTotals) -----
+      // reset
       subjects = {};
       gender = {};
-      projectTotals = { PA:0, PB:0, PC:0, PD:0, PE:0, PX:0 };  // fresh
+      projectTotals = { PA:0, PB:0, PC:0, PD:0, PE:0, PX:0 };
 
       rows.forEach(row => {
         const sex = String(row.Sex || '').toUpperCase().trim();
@@ -667,10 +676,10 @@
         const validGrades = ['A','B','C','D','E','X'];
         const pg = validGrades.includes(project) ? project : 'X';
         
-        // --- FIXED: count project work once per candidate ---
+        // --- PER-CANDIDATE PROJECT COUNT (ACCURATE) ---
         projectTotals['P' + pg]++;
 
-        // --- ORIGINAL subject & gender counting (unchanged) ---
+        // --- SUBJECT & GENDER COUNTS (ORIGINAL, UNCHANGED) ---
         achievements.split(' ').forEach(item => {
           if (!item.includes('-')) return;
           const [subjectRaw, gradeRaw] = item.split('-');
@@ -723,7 +732,7 @@
         <td>${x.E}</td><td>${p('E')}%</td><td>${x.X}</td></tr>`;
     });
 
-    // ----- PROJECT WORK row – now using global projectTotals (FIXED) -----
+    // ----- PROJECT WORK row – now using global projectTotals (ACCURATE) -----
     html += `<tr class="project-row"><td></td><td>📌 PROJECT WORK</td><td></td>
       <td>${projectTotals.PA}</td><td></td><td>${projectTotals.PB}</td><td></td>
       <td>${projectTotals.PC}</td><td></td><td>${projectTotals.PD}</td><td></td>
@@ -788,28 +797,30 @@
     XLSX.writeFile(wb, `UNEB_${school.replace(/\s/g,'_')}_${year||'report'}.xlsx`);
   }
 
-  // -------------------- BATCH TESTIMONIAL GENERATION – HANDLES 500+ CANDIDATES, PROGRESS BAR, HIGH RESOLUTION --------------------
+  // -------------------- BATCH TESTIMONIAL GENERATION – NO FREEZE, PERFECT MARGINS, SIGNATURE ELEVATED --------------------
   async function generateTestimonialPDFs() {
     if (!lastLoadedRows || lastLoadedRows.length === 0) {
       alert('Please generate the report first (upload Excel and click GENERATE REPORT)');
       return;
     }
 
-    // show progress bar
+    // Disable button and show progress
+    const generateBtn = document.getElementById('generateTestimonialBtn');
+    generateBtn.disabled = true;
+    generateBtn.innerHTML = '<span class="spinner"></span> GENERATING...';
     const progressContainer = document.getElementById('progressContainer');
     const progressBar = document.getElementById('progressBar');
     progressContainer.style.display = 'block';
     progressBar.style.width = '0%';
     progressBar.innerText = '0%';
 
-    // read logo files as dataURLs
+    // read logo files
     const logoLeftFile = document.getElementById('logoLeft').files[0];
     const logoRightFile = document.getElementById('logoRight').files[0];
     let logoLeftData = null, logoRightData = null;
     if (logoLeftFile) logoLeftData = await readFileAsDataURL(logoLeftFile);
     if (logoRightFile) logoRightData = await readFileAsDataURL(logoRightFile);
 
-    // get all school settings
     const settings = {
       schoolName: document.getElementById('testSchoolName').value || 'RUBONGI ARMY SECONDARY SCHOOL',
       address: document.getElementById('schoolAddress').value || 'P.O.BOX 698 TORORO',
@@ -830,13 +841,12 @@
     const folder = zip.folder('Testimonials');
 
     const total = lastLoadedRows.length;
-    const batchSize = 20;  // process 20 at a time to keep UI responsive
+    const batchSize = 15;  // optimal for performance & UI responsiveness
     let processed = 0;
 
     for (let i = 0; i < total; i += batchSize) {
       const batch = lastLoadedRows.slice(i, i + batchSize);
       
-      // Process each candidate in the batch
       for (const row of batch) {
         const candidateName = row.Candidate_Name || 'Unknown';
         const indexNo = row.IndexNo || '';
@@ -844,7 +854,6 @@
         const projectGrade = row['PROJECT WORK'] || 'X';
         const achievements = String(row['SUBJECT ACHIEVEMENTS'] || '').trim();
 
-        // parse subject-grade pairs
         const subjectsList = [];
         if (achievements) {
           achievements.split(' ').forEach(item => {
@@ -855,10 +864,10 @@
           });
         }
 
-        // ----- BUILD PROFESSIONAL, COLOR-ENHANCED TESTIMONIAL HTML -----
+        // ----- PROFESSIONAL, PERFECTLY MARGINED TESTIMONIAL HTML -----
         const testimonialHTML = `
           <div class="testimonial-page">
-            <!-- Header with logos and school info -->
+            <!-- Header with logos -->
             <div class="testimonial-header">
               <div class="logo-box">
                 ${logoLeftData 
@@ -880,54 +889,39 @@
               </div>
             </div>
 
-            <!-- Date -->
             <div class="testimonial-date"><strong>DATE:</strong> ${currentDate}</div>
-
-            <!-- Title -->
             <div class="testimonial-title">NLSC TESTIMONIAL 2026</div>
 
-            <!-- Candidate details – one line, left-aligned -->
             <div class="candidate-details">
               <span><strong>NAME:</strong> ${candidateName}</span>
               <span><strong>INDEX NO:</strong> ${indexNo}</span>
             </div>
 
-            <!-- LIN row – CENTRED -->
             <div class="lin-row">
               <span class="lin-label"><strong>LIN:</strong></span>
               <span class="lin-dots"></span>
             </div>
 
-            <!-- Subject table -->
             <table class="subject-table">
               <thead>
-                <tr>
-                  <th>S/NO</th>
-                  <th>SUBJECT</th>
-                  <th>SUBJECT ACHIEVEMENT</th>
-                </tr>
+                <tr><th>S/NO</th><th>SUBJECT</th><th>SUBJECT ACHIEVEMENT</th></tr>
               </thead>
               <tbody>
                 ${subjectsList.length > 0 
                   ? subjectsList.map(([sub, grade], idx) => `
-                      <tr>
-                        <td>${idx + 1}</td>
-                        <td>${sub}</td>
-                        <td style="font-weight: bold; text-align: center;">${grade}</td>
-                      </tr>
+                      <tr><td>${idx + 1}</td><td>${sub}</td><td style="font-weight: bold; text-align: center;">${grade}</td></tr>
                     `).join('')
                   : `<tr><td colspan="3" style="text-align:center; font-style:italic;">No subjects recorded</td></tr>`
                 }
               </tbody>
             </table>
 
-            <!-- Result and Project Work -->
             <div class="result-row">
               <span><strong>RESULT:</strong> ${resultOverall}</span>
               <span><strong>PROJECT WORK:</strong> ${projectGrade}</span>
             </div>
 
-            <!-- Signature block – bottom right, text left-aligned -->
+            <!-- Signature block – elevated, not touching bottom -->
             <div class="signature-wrapper">
               <div class="signature-inner">
                 <div class="signature-line-sign"></div>
@@ -939,12 +933,10 @@
           </div>
         `;
 
-        // create a temporary container
         const container = document.createElement('div');
         container.innerHTML = testimonialHTML;
         document.body.appendChild(container);
 
-        // ensure all images are fully loaded
         const images = container.querySelectorAll('img');
         await Promise.all(Array.from(images).map(img => {
           if (img.complete) return Promise.resolve();
@@ -952,13 +944,13 @@
         }));
 
         try {
-          // HIGHEST QUALITY – scale 3.2 for razor-sharp print
+          // HIGH-RESOLUTION, SAFE MARGINS – no cutting
           const pdfBlob = await html2pdf().set({
-            margin: [5, 5, 5, 5],
+            margin: [12, 12, 12, 12],   // 12mm all around – safe for A4
             filename: `${candidateName}.pdf`,
             image: { type: 'jpeg', quality: 0.98 },
             html2canvas: { 
-              scale: 3.2,
+              scale: 3.0,              // ultra sharp
               letterRendering: true, 
               useCORS: true, 
               logging: false,
@@ -975,33 +967,30 @@
         document.body.removeChild(container);
         processed++;
         
-        // update progress bar
         const percent = Math.round((processed / total) * 100);
         progressBar.style.width = percent + '%';
         progressBar.innerText = percent + '%';
         
-        // yield event loop every 5 candidates to keep UI responsive
-        if (processed % 5 === 0) {
-          await new Promise(resolve => setTimeout(resolve, 0));
+        // yield every 3 candidates
+        if (processed % 3 === 0) {
+          await new Promise(resolve => setTimeout(resolve, 5));
         }
       }
-      
-      // yield between batches
-      await new Promise(resolve => setTimeout(resolve, 20));
+      await new Promise(resolve => setTimeout(resolve, 10));
     }
 
-    // generate zip
     const zipBlob = await zip.generateAsync({ type: 'blob' });
     const zipLink = document.createElement('a');
     zipLink.href = URL.createObjectURL(zipBlob);
     zipLink.download = `Testimonials_${settings.schoolName.replace(/\s/g,'_')}_${new Date().getTime()}.zip`;
     zipLink.click();
 
-    // hide progress bar after download
+    // Re-enable button, hide progress
+    generateBtn.disabled = false;
+    generateBtn.innerHTML = '📦 GENERATE TESTIMONIALS (ZIP / PDF)';
     progressContainer.style.display = 'none';
   }
 
-  // helper: read file as dataURL
   function readFileAsDataURL(file) {
     return new Promise((resolve, reject) => {
       const reader = new FileReader();
@@ -1011,12 +1000,10 @@
     });
   }
 
-  // sanitize filename
   function sanitizeFileName(name) {
     return name.replace(/[\\/*?:"<>|]/g, '_').trim();
   }
 
-  // expose functions
   window.toggleSettings = toggleSettings;
   window.generateTestimonialPDFs = generateTestimonialPDFs;
   window.logout = logout;
