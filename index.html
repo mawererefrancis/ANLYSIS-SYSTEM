@@ -184,6 +184,27 @@
     }
     .setting-group textarea { min-height: 60px; resize: vertical; }
 
+    /* ----- PROGRESS BAR for testimonial generation ----- */
+    .progress-container {
+      width: 100%;
+      background: #eef2f6;
+      border-radius: 50px;
+      margin-top: 16px;
+      padding: 2px;
+      display: none;
+    }
+    .progress-bar {
+      height: 20px;
+      background: #0f5c4b;
+      border-radius: 50px;
+      width: 0%;
+      transition: width 0.2s;
+      color: white;
+      font-size: 12px;
+      text-align: center;
+      line-height: 20px;
+    }
+
     /* ----- print‑page containers (for analytics) ----- */
     .print-page {
       background: white;
@@ -273,19 +294,20 @@
       .action-bar, .settings-toggle, .settings-panel, #file, #schoolName, #year, button { display:none !important; }
     }
 
-    /* ========== TESTIMONIAL PAGE – PERFECTLY BALANCED A4 PORTRAIT ========== */
+    /* ========== TESTIMONIAL PAGE – PROFESSIONAL, COLOR-ENHANCED, PERFECTLY BALANCED ========== */
     .testimonial-page {
       width: 210mm;
       min-height: 297mm;
-      padding: 12mm 15mm 8mm;  /* balanced top/bottom */
+      padding: 10mm 12mm 8mm;
       background: white;
       font-family: 'Times New Roman', Times, serif;
       margin: 0 auto;
       box-sizing: border-box;
       display: flex;
       flex-direction: column;
-      border: none;
-      position: relative;
+      border: 4px double #1e3a5f;      /* elegant double border */
+      border-radius: 8px;              /* subtle rounding */
+      box-shadow: 0 0 0 1px #c0d0e0;   /* soft outer border */
     }
 
     /* header with logos – crisp images */
@@ -294,6 +316,9 @@
       align-items: center;
       justify-content: space-between;
       margin-bottom: 5px;
+      background: linear-gradient(to right, #eef7ff, #ffffff);
+      padding: 8px 10px;
+      border-bottom: 3px solid #2563eb;
     }
     .logo-box {
       width: 90px;
@@ -301,11 +326,12 @@
       display: flex;
       align-items: center;
       justify-content: center;
-      background: #fafbfd;
-      border: 1px solid #ccc;
-      border-radius: 4px;
+      background: white;
+      border: 1px solid #aac7e0;
+      border-radius: 6px;
       padding: 4px;
       image-rendering: auto;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.04);
     }
     .logo-box img {
       max-width: 100%;
@@ -314,7 +340,7 @@
     }
     .logo-placeholder {
       font-size: 11px;
-      color: #5a6b7a;
+      color: #3a6275;
       text-align: center;
       text-transform: uppercase;
       font-weight: 600;
@@ -325,59 +351,69 @@
       margin: 0 8px;
     }
     .school-name-large {
-      font-size: 22px;
+      font-size: 24px;
       font-weight: bold;
       text-transform: uppercase;
-      letter-spacing: 1.5px;
-      color: #000;
+      letter-spacing: 2px;
+      color: #0b2b5e;
       line-height: 1.2;
+      text-shadow: 1px 1px 0 #e0ecff;
     }
     .school-address {
       font-size: 13px;
-      font-weight: 500;
+      font-weight: 600;
+      color: #2c4e6b;
     }
     .school-vision, .school-mission, .school-motto {
       font-size: 11px;
       font-style: italic;
+      color: #2e475d;
     }
 
     /* date – right aligned */
     .testimonial-date {
       text-align: right;
-      margin-top: 2px;
+      margin-top: 6px;
       margin-bottom: 2px;
       font-size: 13px;
       font-weight: bold;
+      color: #1e3a5f;
     }
 
     /* main title */
     .testimonial-title {
       text-align: center;
-      font-size: 22px;
+      font-size: 26px;
       font-weight: bold;
       text-decoration: underline;
-      margin: 12px 0 12px;
-      text-underline-offset: 4px;
+      text-decoration-color: #2563eb;
+      text-underline-offset: 6px;
+      margin: 12px 0 16px;
+      color: #0b2b5e;
+      letter-spacing: 2px;
     }
 
-    /* candidate details – both on same line */
+    /* candidate details – both on ONE line, left-aligned consistently */
     .candidate-details {
       display: flex;
       justify-content: space-between;
       font-size: 16px;
       margin: 6px 0 4px;
-      flex-wrap: nowrap;       /* force one line */
+      flex-wrap: nowrap;
       white-space: nowrap;
+      padding-left: 10px;   /* align left edge */
+      padding-right: 10px;
     }
     .candidate-details span {
       white-space: nowrap;
     }
 
-    /* LIN row – dotted line fills remaining space */
+    /* LIN row – centred horizontally */
     .lin-row {
-      margin: 8px 0 16px;
+      margin: 10px 0 20px;
       font-size: 16px;
       display: flex;
+      justify-content: center;   /* centre the whole group */
       align-items: baseline;
       width: 100%;
     }
@@ -385,55 +421,73 @@
       font-weight: bold;
       margin-right: 8px;
       white-space: nowrap;
+      color: #0b2b5e;
     }
     .lin-dots {
-      flex: 1;
-      border-bottom: 2px dotted #000;
+      width: 250px;            /* fixed width for perfect centering */
+      border-bottom: 2px dotted #1e3a5f;
       margin-left: 4px;
       height: 1.2em;
     }
 
-    /* subject table – clean borders, consistent */
+    /* subject table – clean borders, professional header */
     .subject-table {
       width: 100%;
       border-collapse: collapse;
-      margin: 8px 0 15px;
-      border: 2px solid #000;
+      margin: 8px 0 20px;
+      border: 2px solid #1e3a5f;
+      box-shadow: 0 4px 6px rgba(0,0,0,0.03);
     }
     .subject-table th {
-      background: #e6e6e6;
-      color: #000;
-      border: 1px solid #000;
-      padding: 7px 4px;
+      background: linear-gradient(to bottom, #2563eb, #1e3a8a);
+      color: white;
+      border: 1px solid #0b2b5e;
+      padding: 8px 4px;
       font-weight: bold;
       font-size: 14px;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
     }
     .subject-table td {
-      border: 1px solid #000;
-      padding: 5px 4px;
+      border: 1px solid #5f7d9c;
+      padding: 6px 4px;
       font-size: 14px;
+      background-color: #fdfdfe;
+    }
+    .subject-table tr:nth-child(even) td {
+      background-color: #f4f9ff;
     }
 
-    /* result & project row – side by side */
+    /* result & project row – side by side, bold */
     .result-row {
       display: flex;
       justify-content: space-between;
       font-size: 18px;
       font-weight: bold;
-      margin: 5px 0 0;
+      margin: 10px 0 5px;
+      color: #0b2b5e;
+      padding: 8px 10px;
+      background: #eaf0fa;
+      border-radius: 50px;
     }
 
-    /* signature – BOTTOM RIGHT, perfectly aligned */
+    /* signature – BOTTOM RIGHT, left-aligned text inside the block */
     .signature-wrapper {
       display: flex;
       flex-direction: column;
-      align-items: flex-end;
-      margin-top: auto;        /* push to bottom */
+      align-items: flex-end;   /* pushes block to the right */
+      margin-top: auto;
       padding-top: 20px;
       width: 100%;
     }
+    .signature-inner {
+      display: flex;
+      flex-direction: column;
+      align-items: flex-start; /* text inside is left-aligned */
+      width: fit-content;
+    }
     .signature-line-sign {
-      border-top: 2px solid #000;
+      border-top: 2px solid #0b2b5e;
       width: 240px;
       margin-bottom: 6px;
     }
@@ -442,17 +496,13 @@
       font-weight: bold;
       text-transform: uppercase;
       letter-spacing: 1px;
+      color: #0b2b5e;
     }
     .signature-title {
       font-size: 16px;
     }
     .signature-rank {
       font-size: 16px;
-    }
-
-    /* ensure no unexpected overflow */
-    .testimonial-page > * {
-      flex-shrink: 0;
     }
   </style>
 </head>
@@ -545,10 +595,16 @@
       <label>Head Rank</label>
       <input type="text" id="htRank" value="HEAD TEACHER">
     </div>
-    <div style="flex:1 1 100%; display:flex; justify-content:flex-end;">
-      <button onclick="generateTestimonialPDFs()" style="background:#0f5c4b; padding:14px 32px;">
-        📦 GENERATE TESTIMONIALS (ZIP / PDF)
-      </button>
+    <!-- Progress indicator & batch generation -->
+    <div style="flex:1 1 100%; display:flex; flex-direction:column; gap:12px;">
+      <div style="display:flex; justify-content:flex-end;">
+        <button onclick="generateTestimonialPDFs()" style="background:#0f5c4b; padding:14px 32px;">
+          📦 GENERATE TESTIMONIALS (ZIP / PDF)
+        </button>
+      </div>
+      <div id="progressContainer" class="progress-container">
+        <div id="progressBar" class="progress-bar">0%</div>
+      </div>
     </div>
   </div>
 
@@ -558,9 +614,10 @@
 </div>
 
 <script>
-  // -------------------- GLOBAL DATA (COUNTING LOGIC UNTOUCHED) --------------------
-  let subjects = {};   // per subject: sat, A,B,C,D,E,X, PA,PB,PC,PD,PE,PX
+  // -------------------- GLOBAL DATA (COUNTING LOGIC – PROJECT WORK FIXED, ELSE UNCHANGED) --------------------
+  let subjects = {};   // per subject: sat, A,B,C,D,E,X
   let gender = {};    // per subject: MA,MB,MC,MD,ME, FA,FB,FC,FD,FE
+  let projectTotals = { PA:0, PB:0, PC:0, PD:0, PE:0, PX:0 };   // NEW: global project counts
   let lastLoadedRows = null;   // raw rows for testimonial export
 
   // -------------------- LOGIN / LOGOUT --------------------
@@ -585,7 +642,7 @@
     document.getElementById('testimonialSettings').classList.toggle('show');
   }
 
-  // -------------------- GENERATE REPORT – COUNTING LOGIC EXACTLY ORIGINAL --------------------
+  // -------------------- GENERATE REPORT – COUNTING LOGIC: PROJECT WORK FIXED, ELSE ORIGINAL --------------------
   function generateReport() {
     const file = document.getElementById('file').files[0];
     if (!file) { alert('Please select the UNEB Excel annex'); return; }
@@ -594,11 +651,12 @@
     reader.onload = function (e) {
       const wb = XLSX.read(e.target.result, { type: 'array' });
       const rows = XLSX.utils.sheet_to_json(wb.Sheets[wb.SheetNames[0]]);
-      lastLoadedRows = rows;   // store for testimonials
+      lastLoadedRows = rows;
 
-      // ----- reset (original logic, unchanged) -----
+      // ----- reset (original logic for subjects/gender, plus new projectTotals) -----
       subjects = {};
       gender = {};
+      projectTotals = { PA:0, PB:0, PC:0, PD:0, PE:0, PX:0 };  // fresh
 
       rows.forEach(row => {
         const sex = String(row.Sex || '').toUpperCase().trim();
@@ -608,7 +666,11 @@
 
         const validGrades = ['A','B','C','D','E','X'];
         const pg = validGrades.includes(project) ? project : 'X';
+        
+        // --- FIXED: count project work once per candidate ---
+        projectTotals['P' + pg]++;
 
+        // --- ORIGINAL subject & gender counting (unchanged) ---
         achievements.split(' ').forEach(item => {
           if (!item.includes('-')) return;
           const [subjectRaw, gradeRaw] = item.split('-');
@@ -616,11 +678,10 @@
           const g = validGrades.includes(gradeRaw) ? gradeRaw : 'X';
 
           if (!subjects[subject]) {
-            subjects[subject] = { sat:0, A:0, B:0, C:0, D:0, E:0, X:0, PA:0, PB:0, PC:0, PD:0, PE:0, PX:0 };
+            subjects[subject] = { sat:0, A:0, B:0, C:0, D:0, E:0, X:0 };
           }
           subjects[subject].sat++;
           subjects[subject][g]++;
-          subjects[subject]['P' + pg]++;
 
           if (!gender[subject]) {
             gender[subject] = { MA:0, MB:0, MC:0, MD:0, ME:0, FA:0, FB:0, FC:0, FD:0, FE:0 };
@@ -644,7 +705,7 @@
     reader.readAsArrayBuffer(file);
   }
 
-  // -------------------- RENDER SUBJECT TABLE (full, with analytics) --------------------
+  // -------------------- RENDER SUBJECT TABLE (with CORRECT project totals) --------------------
   function buildSubjectTableHTML() {
     let totals = { A:0, B:0, C:0, D:0, E:0 };
     let html = `<h3 style="color:#0a2c4e; border-left:6px solid #2563eb; padding-left:12px; margin-bottom:6px;">📋 TABLE 1: SUBJECT PERFORMANCE SUMMARY</h3>`;
@@ -662,13 +723,11 @@
         <td>${x.E}</td><td>${p('E')}%</td><td>${x.X}</td></tr>`;
     });
 
-    let projTotals = { PA:0, PB:0, PC:0, PD:0, PE:0, PX:0 };
-    Object.values(subjects).forEach(x => { projTotals.PA += x.PA; projTotals.PB += x.PB; projTotals.PC += x.PC; projTotals.PD += x.PD; projTotals.PE += x.PE; projTotals.PX += x.PX; });
-
+    // ----- PROJECT WORK row – now using global projectTotals (FIXED) -----
     html += `<tr class="project-row"><td></td><td>📌 PROJECT WORK</td><td></td>
-      <td>${projTotals.PA}</td><td></td><td>${projTotals.PB}</td><td></td>
-      <td>${projTotals.PC}</td><td></td><td>${projTotals.PD}</td><td></td>
-      <td>${projTotals.PE}</td><td></td><td>${projTotals.PX}</td></tr>`;
+      <td>${projectTotals.PA}</td><td></td><td>${projectTotals.PB}</td><td></td>
+      <td>${projectTotals.PC}</td><td></td><td>${projectTotals.PD}</td><td></td>
+      <td>${projectTotals.PE}</td><td></td><td>${projectTotals.PX}</td></tr>`;
 
     html += `<tfoot><tr><td></td><td><strong>TOTAL (A–E)</strong></td><td></td>
       <td>${totals.A}</td><td></td><td>${totals.B}</td><td></td>
@@ -684,7 +743,7 @@
     return html;
   }
 
-  // -------------------- RENDER GENDER TABLE --------------------
+  // -------------------- RENDER GENDER TABLE (unchanged) --------------------
   function buildGenderTableHTML() {
     let grand = { MA:0, MB:0, MC:0, MD:0, ME:0, FA:0, FB:0, FC:0, FD:0, FE:0 };
     let html = `<h3 style="color:#0a2c4e; border-left:6px solid #2563eb; padding-left:12px; margin-bottom:6px;">⚥ TABLE 2: GENDER DISTRIBUTION BY SUBJECT</h3>`;
@@ -729,12 +788,19 @@
     XLSX.writeFile(wb, `UNEB_${school.replace(/\s/g,'_')}_${year||'report'}.xlsx`);
   }
 
-  // -------------------- INDIVIDUAL TESTIMONIAL – PERFECTLY BALANCED A4, CRISP IMAGES --------------------
+  // -------------------- BATCH TESTIMONIAL GENERATION – HANDLES 500+ CANDIDATES, PROGRESS BAR, HIGH RESOLUTION --------------------
   async function generateTestimonialPDFs() {
     if (!lastLoadedRows || lastLoadedRows.length === 0) {
       alert('Please generate the report first (upload Excel and click GENERATE REPORT)');
       return;
     }
+
+    // show progress bar
+    const progressContainer = document.getElementById('progressContainer');
+    const progressBar = document.getElementById('progressBar');
+    progressContainer.style.display = 'block';
+    progressBar.style.width = '0%';
+    progressBar.innerText = '0%';
 
     // read logo files as dataURLs
     const logoLeftFile = document.getElementById('logoLeft').files[0];
@@ -758,145 +824,170 @@
       htRank: document.getElementById('htRank').value || 'HEAD TEACHER'
     };
 
-    const currentDate = new Date().toLocaleDateString('en-GB', { day:'2-digit', month:'2-digit', year:'numeric' }); // DD/MM/YYYY
+    const currentDate = new Date().toLocaleDateString('en-GB', { day:'2-digit', month:'2-digit', year:'numeric' });
 
     const zip = new JSZip();
     const folder = zip.folder('Testimonials');
 
-    for (const row of lastLoadedRows) {
-      const candidateName = row.Candidate_Name || 'Unknown';
-      const indexNo = row.IndexNo || '';
-      const resultOverall = row.Result || '';
-      const projectGrade = row['PROJECT WORK'] || 'X';
-      const achievements = String(row['SUBJECT ACHIEVEMENTS'] || '').trim();
+    const total = lastLoadedRows.length;
+    const batchSize = 20;  // process 20 at a time to keep UI responsive
+    let processed = 0;
 
-      // parse subject-grade pairs
-      const subjectsList = [];
-      if (achievements) {
-        achievements.split(' ').forEach(item => {
-          if (item.includes('-')) {
-            let [sub, grad] = item.split('-');
-            subjectsList.push([sub.trim(), grad.trim()]);
-          }
-        });
+    for (let i = 0; i < total; i += batchSize) {
+      const batch = lastLoadedRows.slice(i, i + batchSize);
+      
+      // Process each candidate in the batch
+      for (const row of batch) {
+        const candidateName = row.Candidate_Name || 'Unknown';
+        const indexNo = row.IndexNo || '';
+        const resultOverall = row.Result || '';
+        const projectGrade = row['PROJECT WORK'] || 'X';
+        const achievements = String(row['SUBJECT ACHIEVEMENTS'] || '').trim();
+
+        // parse subject-grade pairs
+        const subjectsList = [];
+        if (achievements) {
+          achievements.split(' ').forEach(item => {
+            if (item.includes('-')) {
+              let [sub, grad] = item.split('-');
+              subjectsList.push([sub.trim(), grad.trim()]);
+            }
+          });
+        }
+
+        // ----- BUILD PROFESSIONAL, COLOR-ENHANCED TESTIMONIAL HTML -----
+        const testimonialHTML = `
+          <div class="testimonial-page">
+            <!-- Header with logos and school info -->
+            <div class="testimonial-header">
+              <div class="logo-box">
+                ${logoLeftData 
+                  ? `<img src="${logoLeftData}" alt="School Logo" crossorigin="anonymous">` 
+                  : `<span class="logo-placeholder">SCHOOL<br>LOGO</span>`}
+              </div>
+              <div class="school-info">
+                <div class="school-name-large">${settings.schoolName}</div>
+                <div class="school-address">${settings.address}  TEL: ${settings.tel1} / ${settings.tel2}</div>
+                <div class="school-address">${settings.website}</div>
+                <div class="school-vision">VISION: <em>${settings.vision}</em></div>
+                <div class="school-mission">MISSION: <em>${settings.mission}</em></div>
+                <div class="school-motto">MOTTO: <em>${settings.motto}</em></div>
+              </div>
+              <div class="logo-box">
+                ${logoRightData 
+                  ? `<img src="${logoRightData}" alt="School Logo" crossorigin="anonymous">` 
+                  : `<span class="logo-placeholder">SCHOOL<br>LOGO</span>`}
+              </div>
+            </div>
+
+            <!-- Date -->
+            <div class="testimonial-date"><strong>DATE:</strong> ${currentDate}</div>
+
+            <!-- Title -->
+            <div class="testimonial-title">NLSC TESTIMONIAL 2026</div>
+
+            <!-- Candidate details – one line, left-aligned -->
+            <div class="candidate-details">
+              <span><strong>NAME:</strong> ${candidateName}</span>
+              <span><strong>INDEX NO:</strong> ${indexNo}</span>
+            </div>
+
+            <!-- LIN row – CENTRED -->
+            <div class="lin-row">
+              <span class="lin-label"><strong>LIN:</strong></span>
+              <span class="lin-dots"></span>
+            </div>
+
+            <!-- Subject table -->
+            <table class="subject-table">
+              <thead>
+                <tr>
+                  <th>S/NO</th>
+                  <th>SUBJECT</th>
+                  <th>SUBJECT ACHIEVEMENT</th>
+                </tr>
+              </thead>
+              <tbody>
+                ${subjectsList.length > 0 
+                  ? subjectsList.map(([sub, grade], idx) => `
+                      <tr>
+                        <td>${idx + 1}</td>
+                        <td>${sub}</td>
+                        <td style="font-weight: bold; text-align: center;">${grade}</td>
+                      </tr>
+                    `).join('')
+                  : `<tr><td colspan="3" style="text-align:center; font-style:italic;">No subjects recorded</td></tr>`
+                }
+              </tbody>
+            </table>
+
+            <!-- Result and Project Work -->
+            <div class="result-row">
+              <span><strong>RESULT:</strong> ${resultOverall}</span>
+              <span><strong>PROJECT WORK:</strong> ${projectGrade}</span>
+            </div>
+
+            <!-- Signature block – bottom right, text left-aligned -->
+            <div class="signature-wrapper">
+              <div class="signature-inner">
+                <div class="signature-line-sign"></div>
+                <div class="signature-name">${settings.htName}</div>
+                <div class="signature-title">${settings.htTitle}</div>
+                <div class="signature-rank">${settings.htRank}</div>
+              </div>
+            </div>
+          </div>
+        `;
+
+        // create a temporary container
+        const container = document.createElement('div');
+        container.innerHTML = testimonialHTML;
+        document.body.appendChild(container);
+
+        // ensure all images are fully loaded
+        const images = container.querySelectorAll('img');
+        await Promise.all(Array.from(images).map(img => {
+          if (img.complete) return Promise.resolve();
+          return new Promise(resolve => { img.onload = resolve; img.onerror = resolve; });
+        }));
+
+        try {
+          // HIGHEST QUALITY – scale 3.2 for razor-sharp print
+          const pdfBlob = await html2pdf().set({
+            margin: [5, 5, 5, 5],
+            filename: `${candidateName}.pdf`,
+            image: { type: 'jpeg', quality: 0.98 },
+            html2canvas: { 
+              scale: 3.2,
+              letterRendering: true, 
+              useCORS: true, 
+              logging: false,
+              allowTaint: false
+            },
+            jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' }
+          }).from(container).output('blob');
+
+          folder.file(`${sanitizeFileName(candidateName)}.pdf`, pdfBlob);
+        } catch (err) {
+          console.error('PDF generation failed for', candidateName, err);
+        }
+
+        document.body.removeChild(container);
+        processed++;
+        
+        // update progress bar
+        const percent = Math.round((processed / total) * 100);
+        progressBar.style.width = percent + '%';
+        progressBar.innerText = percent + '%';
+        
+        // yield event loop every 5 candidates to keep UI responsive
+        if (processed % 5 === 0) {
+          await new Promise(resolve => setTimeout(resolve, 0));
+        }
       }
-
-      // ----- BUILD PERFECTLY BALANCED TESTIMONIAL HTML -----
-      const testimonialHTML = `
-        <div class="testimonial-page">
-          <!-- Header with logos and school info -->
-          <div class="testimonial-header">
-            <div class="logo-box">
-              ${logoLeftData 
-                ? `<img src="${logoLeftData}" alt="School Logo" crossorigin="anonymous">` 
-                : `<span class="logo-placeholder">SCHOOL<br>LOGO</span>`}
-            </div>
-            <div class="school-info">
-              <div class="school-name-large">${settings.schoolName}</div>
-              <div class="school-address">${settings.address}  TEL: ${settings.tel1} / ${settings.tel2}</div>
-              <div class="school-address">${settings.website}</div>
-              <div class="school-vision">VISION: <em>${settings.vision}</em></div>
-              <div class="school-mission">MISSION: <em>${settings.mission}</em></div>
-              <div class="school-motto">MOTTO: <em>${settings.motto}</em></div>
-            </div>
-            <div class="logo-box">
-              ${logoRightData 
-                ? `<img src="${logoRightData}" alt="School Logo" crossorigin="anonymous">` 
-                : `<span class="logo-placeholder">SCHOOL<br>LOGO</span>`}
-            </div>
-          </div>
-
-          <!-- Date (right aligned) -->
-          <div class="testimonial-date"><strong>DATE:</strong> ${currentDate}</div>
-
-          <!-- Testimonial Title -->
-          <div class="testimonial-title">NLSC TESTIMONIAL 2026</div>
-
-          <!-- Candidate details – both on ONE line -->
-          <div class="candidate-details">
-            <span><strong>NAME:</strong> ${candidateName}</span>
-            <span><strong>INDEX NO:</strong> ${indexNo}</span>
-          </div>
-
-          <!-- LIN row with dotted line (full width) -->
-          <div class="lin-row">
-            <span class="lin-label"><strong>LIN:</strong></span>
-            <span class="lin-dots"></span>
-          </div>
-
-          <!-- Subject table – even if empty, show placeholder -->
-          <table class="subject-table">
-            <thead>
-              <tr>
-                <th>S/NO</th>
-                <th>SUBJECT</th>
-                <th>SUBJECT ACHIEVEMENT</th>
-              </tr>
-            </thead>
-            <tbody>
-              ${subjectsList.length > 0 
-                ? subjectsList.map(([sub, grade], idx) => `
-                    <tr>
-                      <td>${idx + 1}</td>
-                      <td>${sub}</td>
-                      <td style="font-weight: bold; text-align: center;">${grade}</td>
-                    </tr>
-                  `).join('')
-                : `<tr><td colspan="3" style="text-align:center; font-style:italic;">No subjects recorded</td></tr>`
-              }
-            </tbody>
-          </table>
-
-          <!-- Result and Project Work -->
-          <div class="result-row">
-            <span><strong>RESULT:</strong> ${resultOverall}</span>
-            <span><strong>PROJECT WORK:</strong> ${projectGrade}</span>
-          </div>
-
-          <!-- Signature block – BOTTOM RIGHT, exactly like Word -->
-          <div class="signature-wrapper">
-            <div class="signature-line-sign"></div>
-            <div class="signature-name">${settings.htName}</div>
-            <div class="signature-title">${settings.htTitle}</div>
-            <div class="signature-rank">${settings.htRank}</div>
-          </div>
-        </div>
-      `;
-
-      // create a temporary container
-      const container = document.createElement('div');
-      container.innerHTML = testimonialHTML;
-      document.body.appendChild(container);
-
-      // ensure all images are fully loaded
-      const images = container.querySelectorAll('img');
-      await Promise.all(Array.from(images).map(img => {
-        if (img.complete) return Promise.resolve();
-        return new Promise(resolve => { img.onload = resolve; img.onerror = resolve; });
-      }));
-
-      try {
-        // HIGH-QUALITY PDF – scale 2.8 for razor-sharp logos and text
-        const pdfBlob = await html2pdf().set({
-          margin: [8, 8, 8, 8],     // even margins
-          filename: `${candidateName}.pdf`,
-          image: { type: 'jpeg', quality: 0.98 },
-          html2canvas: { 
-            scale: 2.8,            // ultra high resolution for print
-            letterRendering: true, 
-            useCORS: true, 
-            logging: false,
-            allowTaint: false
-          },
-          jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' }
-        }).from(container).output('blob');
-
-        folder.file(`${sanitizeFileName(candidateName)}.pdf`, pdfBlob);
-      } catch (err) {
-        console.error('PDF generation failed for', candidateName, err);
-      }
-
-      document.body.removeChild(container);
+      
+      // yield between batches
+      await new Promise(resolve => setTimeout(resolve, 20));
     }
 
     // generate zip
@@ -905,6 +996,9 @@
     zipLink.href = URL.createObjectURL(zipBlob);
     zipLink.download = `Testimonials_${settings.schoolName.replace(/\s/g,'_')}_${new Date().getTime()}.zip`;
     zipLink.click();
+
+    // hide progress bar after download
+    progressContainer.style.display = 'none';
   }
 
   // helper: read file as dataURL
