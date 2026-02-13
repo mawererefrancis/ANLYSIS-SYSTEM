@@ -257,18 +257,9 @@
       background: #0a463a;
     }
 
-    /* ----- PRINT-ONLY TESTIMONIAL CONTAINER ----- */
+    /* ----- PRINT CONTAINER (for individual testimonials) ----- */
     .print-testimonial {
       display: none;
-    }
-    @media print {
-      .print-testimonial {
-        display: block;
-        position: absolute;
-        top: 0;
-        left: 0;
-        width: 100%;
-      }
     }
 
     /* ----- ANALYTICS TABLES – FULLY RESTORED ----- */
@@ -519,6 +510,74 @@
       color: #0b2b5e;
     }
     .signature-title, .signature-rank { font-size: 11px; }
+
+    /* ========== PRINT STYLES – ANALYTICS TABLES ONLY, TWO PAGES ========== */
+    @media print {
+      /* Hide everything except school header and report area */
+      body * {
+        visibility: hidden;
+      }
+      #schoolHeaderContainer,
+      #reportArea,
+      #schoolHeaderContainer *,
+      #reportArea * {
+        visibility: visible;
+      }
+      #schoolHeaderContainer,
+      #reportArea {
+        position: absolute;
+        left: 0;
+        top: 0;
+        width: 100%;
+        background: white;
+      }
+      /* Hide testimonial print container */
+      .print-testimonial {
+        display: none !important;
+      }
+      /* A4 landscape with generous margins */
+      @page {
+        size: A4 landscape;
+        margin: 12mm 12mm 10mm 12mm;
+      }
+      /* Each .print-page forces a new page */
+      .print-page {
+        page-break-after: always;
+        box-shadow: none;
+        border-radius: 0;
+        padding: 5px 10px;
+        margin: 0;
+        display: flex;
+        flex-direction: column;
+        min-height: 100%;
+      }
+      .print-page:last-child {
+        page-break-after: avoid;
+      }
+      table {
+        font-size: 9pt !important;
+        margin: 8px 0;
+      }
+      th {
+        padding: 5px 2px !important;
+        font-size: 8.5pt !important;
+        background: #0a2c4e !important;
+        color: white !important;
+        -webkit-print-color-adjust: exact;
+        print-color-adjust: exact;
+      }
+      td {
+        padding: 5px 2px !important;
+      }
+      .signature-block {
+        margin-top: auto;
+        border-top: 1.5px solid #3a5e7a;
+        font-size: 9pt;
+      }
+      .summary-cards {
+        margin-top: 4px;
+      }
+    }
   </style>
 </head>
 <body>
@@ -640,7 +699,7 @@
     </div>
   </div>
 
-  <!-- HIDDEN PRINT CONTAINER -->
+  <!-- HIDDEN PRINT CONTAINER (for individual testimonial prints) -->
   <div id="printContainer" class="print-testimonial"></div>
 
   <!-- REPORT AREA – ANALYTICS TABLES (FULLY RESTORED) -->
@@ -685,7 +744,6 @@
       const rows = XLSX.utils.sheet_to_json(wb.Sheets[wb.SheetNames[0]]);
       lastLoadedRows = rows;
 
-      // Reset data structures
       subjects = {};
       gender = {};
       projectTotals = { PA:0, PB:0, PC:0, PD:0, PE:0, PX:0 };
@@ -699,10 +757,8 @@
         const validGrades = ['A','B','C','D','E','X'];
         const pg = validGrades.includes(project) ? project : 'X';
         
-        // PER-CANDIDATE PROJECT COUNT (ACCURATE)
         projectTotals['P' + pg]++;
 
-        // SUBJECT & GENDER COUNTS (ORIGINAL LOGIC)
         achievements.split(' ').forEach(item => {
           if (!item.includes('-')) return;
           const [subjectRaw, gradeRaw] = item.split('-');
@@ -723,7 +779,6 @@
         });
       });
 
-      // Update school header
       const schoolName = document.getElementById('schoolName').value || 'SCHOOL NAME';
       const year = document.getElementById('year').value || '';
       document.getElementById('schoolHeaderContainer').innerHTML = `
@@ -732,17 +787,14 @@
         <div class="uneb-subhead">UGANDA NATIONAL EXAMINATIONS BOARD · ANALYSIS</div>
       `;
 
-      // RENDER ANALYTICS TABLES
       renderReportPages();
-
-      // POPULATE CANDIDATE LIST
       renderCandidateList();
       document.getElementById('candidateListSection').style.display = 'block';
     };
     reader.readAsArrayBuffer(file);
   }
 
-  // ==================== BUILD SUBJECT TABLE (FULLY RESTORED) ====================
+  // ==================== BUILD SUBJECT TABLE ====================
   function buildSubjectTableHTML() {
     let totals = { A:0, B:0, C:0, D:0, E:0 };
     let html = `<h3 style="color:#0a2c4e; border-left:6px solid #2563eb; padding-left:12px; margin-bottom:6px;">📋 TABLE 1: SUBJECT PERFORMANCE SUMMARY</h3>`;
@@ -777,7 +829,6 @@
       </tr>`;
     });
 
-    // PROJECT WORK ROW – using global projectTotals (accurate)
     html += `<tr class="project-row" style="background: #e3effa; font-weight: 600;">
       <td></td><td>📌 PROJECT WORK</td><td></td>
       <td>${projectTotals.PA}</td><td></td><td>${projectTotals.PB}</td><td></td>
@@ -785,7 +836,6 @@
       <td>${projectTotals.PE}</td><td></td><td>${projectTotals.PX}</td>
     </tr>`;
 
-    // TOTAL ROW
     html += `<tfoot>
       <tr>
         <td></td><td><strong>TOTAL (A–E)</strong></td><td></td>
@@ -795,7 +845,6 @@
       </tr>
     </tfoot></table>`;
 
-    // ANALYTICS CARDS
     let totalA = 0, totalSat = 0;
     Object.values(subjects).forEach(x => { totalA += x.A; totalSat += x.sat; });
     let mean = totalSat ? (totalA / totalSat * 100) : 0;
@@ -809,7 +858,7 @@
     return html;
   }
 
-  // ==================== BUILD GENDER TABLE (FULLY RESTORED) ====================
+  // ==================== BUILD GENDER TABLE ====================
   function buildGenderTableHTML() {
     let grand = { MA:0, MB:0, MC:0, MD:0, ME:0, FA:0, FB:0, FC:0, FD:0, FE:0 };
 
@@ -844,7 +893,7 @@
     return html;
   }
 
-  // ==================== SIGNATURE BLOCK (for analytics pages) ====================
+  // ==================== SIGNATURE BLOCK ====================
   function buildSignatureBlock() {
     return `<div class="signature-block">
       <div class="signature-line">
@@ -864,8 +913,12 @@
     document.getElementById('reportArea').innerHTML = html;
   }
 
-  // ==================== PRINT / PDF / EXCEL (unchanged) ====================
-  function printReport() { window.print(); }
+  // ==================== PRINT – ANALYTICS TABLES ONLY, TWO PAGES ====================
+  function printReport() {
+    window.print();
+  }
+
+  // ==================== PDF / EXCEL ====================
   function downloadPDF() {
     const element = document.getElementById('reportArea');
     element.classList.add('pdf-export-mode');
@@ -1012,7 +1065,7 @@
     window.print();
   }
 
-  // ==================== BULK PDF GENERATION (optimized) ====================
+  // ==================== BULK PDF GENERATION ====================
   async function generateTestimonialPDFs() {
     if (!lastLoadedRows || lastLoadedRows.length === 0) {
       alert('Please generate the report first');
