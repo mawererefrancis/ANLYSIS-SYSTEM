@@ -300,6 +300,16 @@
       color: #0a2c4e;
       border: 1px solid white;
     }
+    /* Section title style (like stream title) */
+    .section-title {
+      background: #2563eb; 
+      color: white; 
+      padding: 5px 12px; 
+      border-radius: 30px 30px 0 0; 
+      margin: 0; 
+      font-size: 1.1rem;
+      display: inline-block;
+    }
     .stream-title {
       background: #2563eb; 
       color: white; 
@@ -590,11 +600,11 @@
     reader.readAsArrayBuffer(file);
   }
 
-  // ========== BUILD SUBJECT TABLE ==========
+  // ========== BUILD SUBJECT TABLE (now with section-title) ==========
   function buildSubjectTableHTML() {
     let totals = { A:0, B:0, C:0, D:0, E:0 };
     let totalSatOverall = 0;
-    let html = `<h3 style="color:#0a2c4e; border-left:6px solid #2563eb; padding-left:12px; margin-bottom:6px;">📋 SUBJECT PERFORMANCE SUMMARY (ALL STREAMS)</h3>`;
+    let html = `<h3 class="section-title">📋 SUBJECT PERFORMANCE SUMMARY (ALL STREAMS)</h3>`;
     html += `<table>
       <thead><tr><th>Rank</th><th>Subject</th><th>Sat</th><th>A</th><th>%A</th><th>B</th><th>%B</th><th>C</th><th>%C</th><th>D</th><th>%D</th><th>E</th><th>%E</th><th>X</th></tr></thead>
       <tbody>`;
@@ -631,23 +641,51 @@
     return html;
   }
 
-  // ========== BUILD GENDER TABLE ==========
+  // ========== BUILD GENDER TABLE (with grade colors and section-title) ==========
   function buildGenderTableHTML() {
     let grand = { MA:0, MB:0, MC:0, MD:0, ME:0, FA:0, FB:0, FC:0, FD:0, FE:0 };
-    let html = `<h3 style="color:#0a2c4e; border-left:6px solid #2563eb; padding-left:12px; margin-bottom:6px;">⚥ GENDER DISTRIBUTION BY SUBJECT</h3>`;
+    let html = `<h3 class="section-title">⚥ GENDER DISTRIBUTION BY SUBJECT</h3>`;
     html += `<table><thead><tr><th>Subject</th><th>MA</th><th>MB</th><th>MC</th><th>MD</th><th>ME</th><th>FA</th><th>FB</th><th>FC</th><th>FD</th><th>FE</th></tr></thead><tbody>`;
 
     Object.keys(gender).sort().forEach(s => {
       let g = gender[s];
       Object.keys(grand).forEach(k => grand[k] += g[k] || 0);
-      html += `<tr><td style="font-weight:600;">${s}</td><td>${g.MA||0}</td><td>${g.MB||0}</td><td>${g.MC||0}</td><td>${g.MD||0}</td><td>${g.ME||0}</td><td>${g.FA||0}</td><td>${g.FB||0}</td><td>${g.FC||0}</td><td>${g.FD||0}</td><td>${g.FE||0}</td></tr>`;
+      html += `<tr><td style="font-weight:600;">${s}</td>
+        <td class="grade-cell grade-A">${g.MA||0}</td>
+        <td class="grade-cell grade-B">${g.MB||0}</td>
+        <td class="grade-cell grade-C">${g.MC||0}</td>
+        <td class="grade-cell grade-D">${g.MD||0}</td>
+        <td class="grade-cell grade-E">${g.ME||0}</td>
+        <td class="grade-cell grade-A">${g.FA||0}</td>
+        <td class="grade-cell grade-B">${g.FB||0}</td>
+        <td class="grade-cell grade-C">${g.FC||0}</td>
+        <td class="grade-cell grade-D">${g.FD||0}</td>
+        <td class="grade-cell grade-E">${g.FE||0}</td>
+      </tr>`;
     });
 
     let totalMale = grand.MA+grand.MB+grand.MC+grand.MD+grand.ME;
     let totalFemale = grand.FA+grand.FB+grand.FC+grand.FD+grand.FE;
-    html += `<tfoot><tr style="background:#eef4ff;"><td><strong>TOTAL</strong></td><td>${grand.MA}</td><td>${grand.MB}</td><td>${grand.MC}</td><td>${grand.MD}</td><td>${grand.ME}</td><td>${grand.FA}</td><td>${grand.FB}</td><td>${grand.FC}</td><td>${grand.FD}</td><td>${grand.FE}</td></tr>`;
-    html += `<tr style="background:#f0f5fa; font-weight:600;"><td><strong>Male %</strong></td><td>${totalMale?((grand.MA/totalMale)*100).toFixed(1):'0.0'}%</td><td>${totalMale?((grand.MB/totalMale)*100).toFixed(1):'0.0'}%</td><td>${totalMale?((grand.MC/totalMale)*100).toFixed(1):'0.0'}%</td><td>${totalMale?((grand.MD/totalMale)*100).toFixed(1):'0.0'}%</td><td>${totalMale?((grand.ME/totalMale)*100).toFixed(1):'0.0'}%</td><td colspan="5"></td></tr>`;
-    html += `<tr style="background:#f0f5fa; font-weight:600;"><td><strong>Female %</strong></td><td colspan="5"></td><td>${totalFemale?((grand.FA/totalFemale)*100).toFixed(1):'0.0'}%</td><td>${totalFemale?((grand.FB/totalFemale)*100).toFixed(1):'0.0'}%</td><td>${totalFemale?((grand.FC/totalFemale)*100).toFixed(1):'0.0'}%</td><td>${totalFemale?((grand.FD/totalFemale)*100).toFixed(1):'0.0'}%</td><td>${totalFemale?((grand.FE/totalFemale)*100).toFixed(1):'0.0'}%</td></tr>`;
+    html += `<tfoot><tr style="background:#eef4ff;"><td><strong>TOTAL</strong></td>
+      <td>${grand.MA}</td><td>${grand.MB}</td><td>${grand.MC}</td><td>${grand.MD}</td><td>${grand.ME}</td>
+      <td>${grand.FA}</td><td>${grand.FB}</td><td>${grand.FC}</td><td>${grand.FD}</td><td>${grand.FE}</td>
+    </tr>`;
+    html += `<tr style="background:#f0f5fa; font-weight:600;"><td><strong>Male %</strong></td>
+      <td>${totalMale?((grand.MA/totalMale)*100).toFixed(1):'0.0'}%</td>
+      <td>${totalMale?((grand.MB/totalMale)*100).toFixed(1):'0.0'}%</td>
+      <td>${totalMale?((grand.MC/totalMale)*100).toFixed(1):'0.0'}%</td>
+      <td>${totalMale?((grand.MD/totalMale)*100).toFixed(1):'0.0'}%</td>
+      <td>${totalMale?((grand.ME/totalMale)*100).toFixed(1):'0.0'}%</td>
+      <td colspan="5"></td>
+    </tr>`;
+    html += `<tr style="background:#f0f5fa; font-weight:600;"><td><strong>Female %</strong></td>
+      <td colspan="5"></td>
+      <td>${totalFemale?((grand.FA/totalFemale)*100).toFixed(1):'0.0'}%</td>
+      <td>${totalFemale?((grand.FB/totalFemale)*100).toFixed(1):'0.0'}%</td>
+      <td>${totalFemale?((grand.FC/totalFemale)*100).toFixed(1):'0.0'}%</td>
+      <td>${totalFemale?((grand.FD/totalFemale)*100).toFixed(1):'0.0'}%</td>
+      <td>${totalFemale?((grand.FE/totalFemale)*100).toFixed(1):'0.0'}%</td>
+    </tr>`;
     html += `</tfoot></table>`;
     return html;
   }
@@ -714,7 +752,7 @@
       };
     }).sort((a,b) => b.pA - a.pA);
 
-    let html = `<h3 style="color:#0a2c4e; border-left:6px solid #f59e0b; padding-left:12px;">🏆 BEST STREAM RANKING (by %A) – FULL GRADE DISTRIBUTION</h3>`;
+    let html = `<h3 class="section-title">🏆 BEST STREAM RANKING (by %A) – FULL GRADE DISTRIBUTION</h3>`;
     html += `<table><thead><tr><th>Rank</th><th>Stream</th><th>Entries</th>
       <th>A</th><th>%A</th><th>B</th><th>%B</th><th>C</th><th>%C</th><th>D</th><th>%D</th><th>E</th><th>%E</th><th>X</th><th>%X</th></tr></thead><tbody>`;
 
@@ -748,16 +786,17 @@
     return html;
   }
 
-  // ========== TOP 20 STUDENTS RANKING TABLE ==========
+  // ========== TOP 20 STUDENTS RANKING TABLE (with separate grade columns) ==========
   function buildTop20TableHTML() {
     if (studentRankings.length === 0) return '';
 
-    let html = `<h3 style="color:#0a2c4e; border-left:6px solid #f59e0b; padding-left:12px;">🏅 TOP 20 STUDENTS OVERALL RANKING</h3>`;
+    let html = `<h3 class="section-title">🏅 TOP 20 STUDENTS OVERALL RANKING</h3>`;
     html += `<table>
       <thead>
         <tr>
           <th>S/No</th><th>Position</th><th>Index No</th><th>Name</th><th>Sex</th>
-          <th>Grade Counts (A/B/C/D/E/X)</th><th>Subjects & Grades</th>
+          <th>A</th><th>B</th><th>C</th><th>D</th><th>E</th><th>X</th>
+          <th>Subjects & Grades</th>
         </tr>
       </thead>
       <tbody>`;
@@ -766,8 +805,7 @@
     top20.forEach((student, idx) => {
       let position = idx + 1;
       let posText = position + (position === 1 ? 'st' : position === 2 ? 'nd' : position === 3 ? 'rd' : 'th');
-      let gradeCounts = student.gradeCounts;
-      let countsText = `A:${gradeCounts.A} B:${gradeCounts.B} C:${gradeCounts.C} D:${gradeCounts.D} E:${gradeCounts.E} X:${gradeCounts.X}`;
+      let counts = student.gradeCounts;
       
       html += `<tr>
         <td>${idx + 1}</td>
@@ -775,7 +813,12 @@
         <td>${student.indexNo}</td>
         <td style="text-align:left;">${student.name}</td>
         <td>${student.sex}</td>
-        <td style="text-align:left; font-size:8.5px;">${countsText}</td>
+        <td class="grade-cell grade-A">${counts.A}</td>
+        <td class="grade-cell grade-B">${counts.B}</td>
+        <td class="grade-cell grade-C">${counts.C}</td>
+        <td class="grade-cell grade-D">${counts.D}</td>
+        <td class="grade-cell grade-E">${counts.E}</td>
+        <td class="grade-cell grade-X">${counts.X}</td>
         <td style="text-align:left; font-size:8px;">${student.subjects}</td>
       </tr>`;
     });
