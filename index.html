@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=2.0, user-scalable=yes">
-  <title>UNEB Performance Navigator · Mawerere Francis</title>
+  <title>UNEB Insight · Mawerere Francis</title>
 
   <!-- libraries -->
   <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
@@ -247,12 +247,12 @@
       vertical-align: middle;
     }
     /* Grade colors */
-    .grade-A { background-color: #c8e6c9; font-weight: bold; color: #1e4a2c; }  /* light green */
-    .grade-B { background-color: #d1e7ff; font-weight: bold; color: #0b3b6b; }  /* light blue */
-    .grade-C { background-color: #fff3cd; font-weight: bold; color: #856404; }  /* light yellow */
-    .grade-D { background-color: #ffe0b2; font-weight: bold; color: #994f00; }  /* light orange */
-    .grade-E { background-color: #f9d6d6; font-weight: bold; color: #a13d3d; }  /* light red */
-    .grade-X { background-color: #e0e0e0; color: #333; }  /* grey */
+    .grade-A { background-color: #c8e6c9; font-weight: bold; color: #1e4a2c; }
+    .grade-B { background-color: #d1e7ff; font-weight: bold; color: #0b3b6b; }
+    .grade-C { background-color: #fff3cd; font-weight: bold; color: #856404; }
+    .grade-D { background-color: #ffe0b2; font-weight: bold; color: #994f00; }
+    .grade-E { background-color: #f9d6d6; font-weight: bold; color: #a13d3d; }
+    .grade-X { background-color: #e0e0e0; color: #333; }
     td.grade-cell { text-align: center; font-weight: 600; }
     
     tfoot td {
@@ -438,138 +438,154 @@
     document.getElementById('signatureSettings').classList.toggle('show');
   }
 
-  // ==================== GENERATE REPORT ====================
+  // ==================== GENERATE REPORT – WITH ERROR HANDLING ====================
   function generateReport() {
     const file = document.getElementById('file').files[0];
-    if (!file) { alert('Please select the UNEB Excel annex'); return; }
+    if (!file) { 
+      alert('Please select the UNEB Excel annex first!'); 
+      return; 
+    }
 
     const reader = new FileReader();
     reader.onload = function (e) {
-      const wb = XLSX.read(e.target.result, { type: 'array' });
-      const rows = XLSX.utils.sheet_to_json(wb.Sheets[wb.SheetNames[0]]);
-      lastLoadedRows = rows;
+      try {
+        const wb = XLSX.read(e.target.result, { type: 'array' });
+        const firstSheetName = wb.SheetNames[0];
+        const sheet = wb.Sheets[firstSheetName];
+        const rows = XLSX.utils.sheet_to_json(sheet, { defval: '' }); // empty string for missing cells
 
-      // reset aggregates
-      subjects = {}; gender = {}; projectTotals = { PA:0, PB:0, PC:0, PD:0, PE:0, PX:0 };
-      streamData = {};
-      streamProjectTotals = {};
-      studentRankings = [];
+        if (!rows || rows.length === 0) {
+          alert('The selected file has no data in the first sheet.');
+          return;
+        }
 
-      const validGrades = ['A','B','C','D','E','X'];
+        lastLoadedRows = rows;
 
-      rows.forEach(row => {
-        const sex = String(row.Sex || '').toUpperCase().trim();
-        const project = String(row['PROJECT WORK'] || 'X').toUpperCase().trim();
-        const achievements = String(row['SUBJECT ACHIEVEMENTS'] || '').trim();
-        const stream = row['STREAM'] ? String(row['STREAM']).trim().toUpperCase() : '';
-        const indexNo = row['IndexNo'] || '';
-        const candidateName = row['Candidate_Name'] || '';
+        // reset aggregates
+        subjects = {}; gender = {}; projectTotals = { PA:0, PB:0, PC:0, PD:0, PE:0, PX:0 };
+        streamData = {};
+        streamProjectTotals = {};
+        studentRankings = [];
 
-        if (!achievements) return;
+        const validGrades = ['A','B','C','D','E','X'];
 
-        // project totals (overall)
-        const pg = validGrades.includes(project) ? project : 'X';
-        projectTotals['P' + pg]++;
+        rows.forEach(row => {
+          // Normalize column access: handle possible spaces/underscores
+          const sex = (row.Sex || row.sex || '').toString().toUpperCase().trim();
+          const project = (row['PROJECT WORK'] || row['PROJECT_WORK'] || row.project_work || row.ProjectWork || 'X').toString().toUpperCase().trim();
+          const achievements = (row['SUBJECT ACHIEVEMENTS'] || row['SUBJECT_ACHIEVEMENTS'] || row.subject_achievements || '').toString().trim();
+          const stream = (row['STREAM'] || row.stream || '').toString().trim().toUpperCase();
+          const indexNo = (row['IndexNo'] || row['INDEXNO'] || row.indexNo || row.Index_No || '').toString().trim();
+          const candidateName = (row['Candidate_Name'] || row['CANDIDATE_NAME'] || row.candidate_name || row.CandidateName || '').toString().trim();
 
-        // Student data for ranking
-        let studentSubjects = [];
-        let gradeCounts = { A:0, B:0, C:0, D:0, E:0, X:0 };
-        let gradePoints = { A:5, B:4, C:3, D:2, E:1, X:0 };
-        let totalPoints = 0;
-        // For core subject tie-breaking: store grades for each core subject in order
-        let coreGrades = {};
+          if (!achievements) return; // skip rows with no subjects
 
-        // process each subject
-        achievements.split(' ').forEach(item => {
-          if (!item.includes('-')) return;
-          const [subjectRaw, gradeRaw] = item.split('-');
-          const subject = subjectRaw.toUpperCase().trim();
-          const g = validGrades.includes(gradeRaw) ? gradeRaw : 'X';
-          
-          studentSubjects.push(`${subject}-${g}`);
-          gradeCounts[g]++;
-          
-          // overall subject aggregates
-          if (!subjects[subject]) subjects[subject] = { sat:0, A:0, B:0, C:0, D:0, E:0, X:0 };
-          subjects[subject].sat++; subjects[subject][g]++;
+          // project totals (overall)
+          const pg = validGrades.includes(project) ? project : 'X';
+          projectTotals['P' + pg]++;
 
-          // gender aggregates
-          if (!gender[subject]) gender[subject] = { MA:0, MB:0, MC:0, MD:0, ME:0, FA:0, FB:0, FC:0, FD:0, FE:0 };
-          if (sex === 'M' && g !== 'X') gender[subject]['M' + g]++;
-          if (sex === 'F' && g !== 'X') gender[subject]['F' + g]++;
+          // Student data for ranking
+          let studentSubjects = [];
+          let gradeCounts = { A:0, B:0, C:0, D:0, E:0, X:0 };
+          let gradePoints = { A:5, B:4, C:3, D:2, E:1, X:0 };
+          let totalPoints = 0;
+          let coreGrades = {};
 
-          // stream aggregates (if stream exists)
+          // process each subject
+          achievements.split(' ').forEach(item => {
+            if (!item.includes('-')) return;
+            const [subjectRaw, gradeRaw] = item.split('-');
+            const subject = subjectRaw.toUpperCase().trim();
+            const g = validGrades.includes(gradeRaw) ? gradeRaw : 'X';
+            
+            studentSubjects.push(`${subject}-${g}`);
+            gradeCounts[g]++;
+            
+            // overall subject aggregates
+            if (!subjects[subject]) subjects[subject] = { sat:0, A:0, B:0, C:0, D:0, E:0, X:0 };
+            subjects[subject].sat++; subjects[subject][g]++;
+
+            // gender aggregates
+            if (!gender[subject]) gender[subject] = { MA:0, MB:0, MC:0, MD:0, ME:0, FA:0, FB:0, FC:0, FD:0, FE:0 };
+            if (sex === 'M' && g !== 'X') gender[subject]['M' + g]++;
+            if (sex === 'F' && g !== 'X') gender[subject]['F' + g]++;
+
+            // stream aggregates (if stream exists)
+            if (stream) {
+              if (!streamData[stream]) streamData[stream] = { overall: { sat:0, A:0, B:0, C:0, D:0, E:0, X:0 }, subjects: {} };
+              if (!streamData[stream].subjects[subject]) 
+                streamData[stream].subjects[subject] = { sat:0, A:0, B:0, C:0, D:0, E:0, X:0 };
+              streamData[stream].subjects[subject].sat++;
+              streamData[stream].subjects[subject][g]++;
+              streamData[stream].overall.sat++;
+              streamData[stream].overall[g]++;
+            }
+
+            // For student ranking
+            totalPoints += gradePoints[g] || 0;
+            if (CORE_SUBJECTS.includes(subject)) {
+              coreGrades[subject] = g;
+            }
+          });
+
+          // Store student ranking info (only if at least one subject processed)
+          if (studentSubjects.length > 0) {
+            studentRankings.push({
+              indexNo,
+              name: candidateName,
+              sex,
+              gradeCounts: { ...gradeCounts },
+              coreGrades,
+              totalPoints,
+              subjects: studentSubjects.join(', ')
+            });
+          }
+
+          // Stream project work totals
           if (stream) {
-            if (!streamData[stream]) streamData[stream] = { overall: { sat:0, A:0, B:0, C:0, D:0, E:0, X:0 }, subjects: {} };
-            if (!streamData[stream].subjects[subject]) 
-              streamData[stream].subjects[subject] = { sat:0, A:0, B:0, C:0, D:0, E:0, X:0 };
-            streamData[stream].subjects[subject].sat++;
-            streamData[stream].subjects[subject][g]++;
-            streamData[stream].overall.sat++;
-            streamData[stream].overall[g]++;
-          }
-
-          // For student ranking
-          totalPoints += gradePoints[g] || 0;
-          if (CORE_SUBJECTS.includes(subject)) {
-            coreGrades[subject] = g;
+            if (!streamProjectTotals[stream]) {
+              streamProjectTotals[stream] = { PA:0, PB:0, PC:0, PD:0, PE:0, PX:0 };
+            }
+            streamProjectTotals[stream]['P' + pg]++;
           }
         });
 
-        // Store student ranking info
-        studentRankings.push({
-          indexNo,
-          name: candidateName,
-          sex,
-          gradeCounts: { ...gradeCounts }, // copy
-          coreGrades, // object with core subject grades
-          totalPoints,
-          subjects: studentSubjects.join(', ')
+        // Sort student rankings by new criteria
+        studentRankings.sort((a, b) => {
+          if (a.gradeCounts.A !== b.gradeCounts.A) return b.gradeCounts.A - a.gradeCounts.A;
+          if (a.gradeCounts.B !== b.gradeCounts.B) return b.gradeCounts.B - a.gradeCounts.B;
+          if (a.gradeCounts.C !== b.gradeCounts.C) return b.gradeCounts.C - a.gradeCounts.C;
+          if (a.gradeCounts.D !== b.gradeCounts.D) return b.gradeCounts.D - a.gradeCounts.D;
+          
+          // Compare core subjects in defined order
+          for (let subj of CORE_SUBJECTS) {
+            let gradeA = a.coreGrades[subj] || 'X';
+            let gradeB = b.coreGrades[subj] || 'X';
+            let valA = { A:5, B:4, C:3, D:2, E:1, X:0 }[gradeA];
+            let valB = { A:5, B:4, C:3, D:2, E:1, X:0 }[gradeB];
+            if (valA !== valB) return valB - valA;
+          }
+          return b.totalPoints - a.totalPoints;
         });
 
-        // Stream project work totals
-        if (stream) {
-          if (!streamProjectTotals[stream]) {
-            streamProjectTotals[stream] = { PA:0, PB:0, PC:0, PD:0, PE:0, PX:0 };
-          }
-          streamProjectTotals[stream]['P' + pg]++;
-        }
-      });
+        // Update header
+        const schoolName = document.getElementById('schoolName').value || 'SCHOOL NAME';
+        const year = document.getElementById('year').value || '';
+        document.getElementById('schoolHeaderContainer').innerHTML = `
+          <span class="school-name">${schoolName}</span>
+          <span class="exam-year">📆 ${year}</span>
+          <div class="uneb-subhead">UGANDA NATIONAL EXAMINATIONS BOARD · ANALYSIS</div>
+        `;
 
-      // Sort student rankings by new criteria:
-      // 1. Number of A's
-      // 2. Number of B's
-      // 3. Number of C's
-      // 4. Number of D's
-      // 5. Compare core subjects in order: ENG, MTC, BIO, CHEM, PHY, GEO, HIS (grade value)
-      studentRankings.sort((a, b) => {
-        if (a.gradeCounts.A !== b.gradeCounts.A) return b.gradeCounts.A - a.gradeCounts.A;
-        if (a.gradeCounts.B !== b.gradeCounts.B) return b.gradeCounts.B - a.gradeCounts.B;
-        if (a.gradeCounts.C !== b.gradeCounts.C) return b.gradeCounts.C - a.gradeCounts.C;
-        if (a.gradeCounts.D !== b.gradeCounts.D) return b.gradeCounts.D - a.gradeCounts.D;
-        
-        // Compare core subjects in defined order
-        for (let subj of CORE_SUBJECTS) {
-          let gradeA = a.coreGrades[subj] || 'X';
-          let gradeB = b.coreGrades[subj] || 'X';
-          let valA = gradePoints[gradeA];
-          let valB = gradePoints[gradeB];
-          if (valA !== valB) return valB - valA; // higher grade first
-        }
-        // If still tied, fallback to total points (optional)
-        return b.totalPoints - a.totalPoints;
-      });
-
-      // Update header
-      const schoolName = document.getElementById('schoolName').value || 'SCHOOL NAME';
-      const year = document.getElementById('year').value || '';
-      document.getElementById('schoolHeaderContainer').innerHTML = `
-        <span class="school-name">${schoolName}</span>
-        <span class="exam-year">📆 ${year}</span>
-        <div class="uneb-subhead">UGANDA NATIONAL EXAMINATIONS BOARD · ANALYSIS</div>
-      `;
-
-      renderReportPages();
+        renderReportPages();
+        alert('Report generated successfully!'); // feedback
+      } catch (error) {
+        console.error('Error during report generation:', error);
+        alert('An error occurred while processing the file. Please check the console (F12) for details.');
+      }
+    };
+    reader.onerror = function() {
+      alert('Failed to read the file. Please try again.');
     };
     reader.readAsArrayBuffer(file);
   }
@@ -838,11 +854,11 @@
     });
 
     html2pdf().set({
-      margin: [5, 5, 5, 5],        // balanced margins (mm)
+      margin: [5, 5, 5, 5],
       filename: 'UNEB_ANALYSIS.pdf',
       image: { type: 'jpeg', quality: 0.98 },
       html2canvas: { 
-        scale: 1.2,                // sharp but safe for A4 landscape
+        scale: 1.2,
         letterRendering: true,
         useCORS: true,
         logging: false,
