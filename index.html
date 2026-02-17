@@ -198,7 +198,7 @@
     /* ========== ANALYTICS TABLES – PROFESSIONAL STYLE ========== */
     .print-page {
       background: white;
-      padding: 8px 15px 12px 15px;  /* balanced padding to avoid cut-off */
+      padding: 8px 15px 12px 15px;
       border-radius: 24px;
       box-shadow: 0 20px 30px -8px rgba(0,20,50,0.15);
       margin-bottom: 20px;
@@ -211,7 +211,7 @@
     table {
       width: 100%;
       border-collapse: collapse;
-      font-size: 10.5px;      /* slightly smaller for safety */
+      font-size: 10.5px;
       margin: 8px 0;
       border: 1px solid #9bb0cc;
       box-shadow: 0 2px 6px rgba(0,0,0,0.03);
@@ -389,6 +389,10 @@
   let lastLoadedRows = null;
   let streamData = {}; // per stream subject aggregates
   let streamProjectTotals = {}; // per stream project work aggregates
+  let studentRankings = []; // for top 20
+
+  // Core subjects for tie-breaking
+  const CORE_SUBJECTS = ['ENG', 'MTC', 'BIO', 'CHEM', 'PHY'];
 
   // ==================== LOGIN / LOGOUT ====================
   function login() {
@@ -422,6 +426,7 @@
       subjects = {}; gender = {}; projectTotals = { PA:0, PB:0, PC:0, PD:0, PE:0, PX:0 };
       streamData = {};
       streamProjectTotals = {};
+      studentRankings = [];
 
       const validGrades = ['A','B','C','D','E','X'];
 
@@ -430,11 +435,22 @@
         const project = String(row['PROJECT WORK'] || 'X').toUpperCase().trim();
         const achievements = String(row['SUBJECT ACHIEVEMENTS'] || '').trim();
         const stream = row['STREAM'] ? String(row['STREAM']).trim().toUpperCase() : '';
+        const indexNo = row['IndexNo'] || '';
+        const candidateName = row['Candidate_Name'] || '';
+
         if (!achievements) return;
 
         // project totals (overall)
         const pg = validGrades.includes(project) ? project : 'X';
         projectTotals['P' + pg]++;
+
+        // Student data for ranking
+        let studentSubjects = [];
+        let gradePoints = { A:5, B:4, C:3, D:2, E:1, X:0 };
+        let totalPoints = 0;
+        let countA = 0;
+        let coreA = 0;
+        let corePoints = 0;
 
         // process each subject
         achievements.split(' ').forEach(item => {
@@ -442,7 +458,9 @@
           const [subjectRaw, gradeRaw] = item.split('-');
           const subject = subjectRaw.toUpperCase().trim();
           const g = validGrades.includes(gradeRaw) ? gradeRaw : 'X';
-
+          
+          studentSubjects.push(`${subject}-${g}`);
+          
           // overall subject aggregates
           if (!subjects[subject]) subjects[subject] = { sat:0, A:0, B:0, C:0, D:0, E:0, X:0 };
           subjects[subject].sat++; subjects[subject][g]++;
@@ -462,6 +480,26 @@
             streamData[stream].overall.sat++;
             streamData[stream].overall[g]++;
           }
+
+          // For student ranking
+          totalPoints += gradePoints[g] || 0;
+          if (g === 'A') countA++;
+          if (CORE_SUBJECTS.includes(subject)) {
+            if (g === 'A') coreA++;
+            corePoints += gradePoints[g] || 0;
+          }
+        });
+
+        // Store student ranking info
+        studentRankings.push({
+          indexNo,
+          name: candidateName,
+          sex,
+          countA,
+          coreA,
+          totalPoints,
+          corePoints,
+          subjects: studentSubjects.join(', ')
         });
 
         // Stream project work totals
@@ -471,6 +509,14 @@
           }
           streamProjectTotals[stream]['P' + pg]++;
         }
+      });
+
+      // Sort student rankings by criteria
+      studentRankings.sort((a, b) => {
+        if (a.countA !== b.countA) return b.countA - a.countA;               // more As first
+        if (a.coreA !== b.coreA) return b.coreA - a.coreA;                   // then core As
+        if (a.totalPoints !== b.totalPoints) return b.totalPoints - a.totalPoints; // total points
+        return b.corePoints - a.corePoints;                                   // finally core points
       });
 
       // Update header
@@ -633,6 +679,44 @@
     return html;
   }
 
+  // ========== TOP 20 STUDENTS RANKING TABLE ==========
+  function buildTop20TableHTML() {
+    if (studentRankings.length === 0) return '';
+
+    let html = `<h3 style="color:#0a2c4e; border-left:6px solid #f59e0b; padding-left:12px;">🏅 TOP 20 STUDENTS OVERALL RANKING</h3>`;
+    html += `<table>
+      <thead>
+        <tr>
+          <th>S/No</th><th>Position</th><th>Index No</th><th>Name</th><th>Sex</th><th>Subjects & Grades</th>
+        </tr>
+      </thead>
+      <tbody>`;
+
+    const top20 = studentRankings.slice(0, 20);
+    top20.forEach((student, idx) => {
+      let position = idx + 1;
+      let posText = position + (position === 1 ? 'st' : position === 2 ? 'nd' : position === 3 ? 'rd' : 'th');
+      html += `<tr>
+        <td>${idx + 1}</td>
+        <td><strong>${posText}</strong></td>
+        <td>${student.indexNo}</td>
+        <td style="text-align:left;">${student.name}</td>
+        <td>${student.sex}</td>
+        <td style="text-align:left; font-size:9px;">${student.subjects}</td>
+      </tr>`;
+    });
+
+    html += `</tbody></table>`;
+
+    // Top performer card
+    if (top20.length > 0) {
+      let top = top20[0];
+      html += `<div class="summary-cards"><div class="card">🥇 Top Student: ${top.name} (${top.indexNo}) · ${top.countA} A's</div></div>`;
+    }
+
+    return html;
+  }
+
   // ========== RENDER ALL PAGES ==========
   function renderReportPages() {
     let html = `<div class="print-page">${buildSubjectTableHTML()}${buildSignatureBlock()}</div>`;
@@ -646,6 +730,11 @@
     // best stream table
     if (Object.keys(streamData).length > 0) {
       html += `<div class="print-page">${buildBestStreamTableHTML()}${buildSignatureBlock()}</div>`;
+    }
+
+    // top 20 students table
+    if (studentRankings.length > 0) {
+      html += `<div class="print-page">${buildTop20TableHTML()}${buildSignatureBlock()}</div>`;
     }
 
     document.getElementById('reportArea').innerHTML = html;
@@ -691,18 +780,17 @@
     });
 
     html2pdf().set({
-      margin: [8, 8, 8, 8],        // balanced margins (mm)
+      margin: [8, 8, 8, 8],
       filename: 'UNEB_ANALYSIS.pdf',
       image: { type: 'jpeg', quality: 0.98 },
       html2canvas: { 
-        scale: 1.3,                // sharp but safe
+        scale: 1.3,
         letterRendering: true,
         useCORS: true,
         logging: false,
         dpi: 300,
         windowWidth: 1200,
         onclone: (clonedDoc) => {
-          // Further adjust cloned document if needed
           const pages = clonedDoc.querySelectorAll('.print-page');
           pages.forEach(p => {
             p.style.padding = '3mm 5mm';
@@ -716,7 +804,6 @@
         orientation: 'landscape'
       }
     }).from(element).save().then(() => {
-      // Restore original styles
       printPages.forEach(page => {
         page.style.padding = '';
         page.style.margin = '';
@@ -741,6 +828,7 @@
           sheetName = match ? match[1].substring(0,20) : 'Stream';
         }
         else if (text.includes('BEST STREAM')) sheetName = 'Best Stream';
+        else if (text.includes('TOP 20 STUDENTS')) sheetName = 'Top 20 Students';
         else sheetName = text.substring(0,20).replace(/[^\w]/g,'_');
       }
       const tbl = page.querySelector('table');
