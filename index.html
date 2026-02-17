@@ -150,102 +150,6 @@
     .action-bar button:hover { background:#15306b; transform:translateY(-2px); }
     .logout-btn { background:#6b2e1e !important; }
 
-    /* settings panel unchanged (keep as before) */
-    .settings-toggle {
-      background: #f0f4fa;
-      border-radius: 20px;
-      padding: 8px 20px;
-      margin-bottom: 16px;
-      display: flex;
-      flex-wrap: wrap;
-      align-items: center;
-      gap: 16px;
-    }
-    .settings-panel {
-      background: white;
-      border-radius: 20px;
-      padding: 20px 24px;
-      margin-bottom: 24px;
-      display: none;
-      flex-wrap: wrap;
-      gap: 20px;
-      border: 1px solid #d4e0ec;
-      box-shadow: 0 6px 12px rgba(0,0,0,0.02);
-    }
-    .settings-panel.show { display: flex; }
-    .setting-group {
-      flex: 1 1 200px;
-      display: flex;
-      flex-direction: column;
-      gap: 6px;
-    }
-    .progress-container {
-      width: 100%;
-      background: #eef2f6;
-      border-radius: 50px;
-      margin-top: 16px;
-      padding: 2px;
-      display: none;
-    }
-    .progress-bar {
-      height: 20px;
-      background: #0f5c4b;
-      border-radius: 50px;
-      width: 0%;
-      transition: width 0.2s;
-      color: white;
-      font-size: 12px;
-      text-align: center;
-      line-height: 20px;
-    }
-    .spinner {
-      display: inline-block;
-      width: 16px;
-      height: 16px;
-      border: 2px solid rgba(255,255,255,0.3);
-      border-radius: 50%;
-      border-top-color: white;
-      animation: spin 0.8s linear infinite;
-      margin-right: 8px;
-    }
-    @keyframes spin { to { transform: rotate(360deg); } }
-
-    /* candidate list */
-    .candidate-list-section {
-      background: white;
-      border-radius: 24px;
-      padding: 20px 24px;
-      margin-bottom: 28px;
-      box-shadow: 0 8px 18px -8px rgba(0,20,40,0.12);
-    }
-    .candidate-table {
-      width: 100%;
-      border-collapse: collapse;
-      font-size: 13px;
-      margin-top: 12px;
-    }
-    .candidate-table th {
-      background: #2563eb;
-      color: white;
-      padding: 10px 6px;
-      text-align: left;
-    }
-    .candidate-table td {
-      padding: 8px 6px;
-      border-bottom: 1px solid #d1d9e6;
-    }
-    .print-btn {
-      background: #0f5c4b;
-      color: white;
-      border: none;
-      padding: 6px 16px;
-      border-radius: 30px;
-      font-size: 12px;
-      font-weight: 600;
-      cursor: pointer;
-    }
-    .print-testimonial { display: none; }
-
     /* ========== ANALYTICS TABLES – PROFESSIONAL STYLE ========== */
     .print-page {
       background: white;
@@ -316,7 +220,7 @@
       color: #0a2c4e;
       border: 1px solid white;
     }
-    /* stream table header styling */
+    /* stream title */
     .stream-title {
       background: #2563eb; color: white; padding: 8px 16px; border-radius: 40px 40px 0 0; margin: 0; font-size: 1.3rem;
     }
@@ -326,7 +230,6 @@
       body * { visibility: hidden; }
       #schoolHeaderContainer, #reportArea, #schoolHeaderContainer *, #reportArea * { visibility: visible; }
       #schoolHeaderContainer, #reportArea { position: absolute; left: 0; top: 0; width: 100%; background: white; }
-      .print-testimonial { display: none !important; }
       @page { size: A4 landscape; margin: 10mm 10mm 8mm 10mm; }
       .print-page { page-break-after: always; box-shadow: none; border-radius: 0; padding: 5px 8px; margin: 0; }
       .print-page:last-child { page-break-after: avoid; }
@@ -364,47 +267,7 @@
     <button class="logout-btn" onclick="logout()"><span>🚪</span> LOGOUT</button>
   </div>
 
-  <div class="settings-toggle">
-    <span style="font-weight:600;">📜 TESTIMONIAL SETTINGS</span>
-    <button onclick="toggleSettings()" style="background:#2d5a7a;">⚙️ Configure</button>
-  </div>
-  <div id="testimonialSettings" class="settings-panel">
-    <!-- settings fields unchanged (kept for brevity, they work as before) -->
-    <div class="setting-group"><label>Left Logo</label><input type="file" id="logoLeft" accept="image/*"></div>
-    <div class="setting-group"><label>Right Logo</label><input type="file" id="logoRight" accept="image/*"></div>
-    <div class="setting-group"><label>School Name</label><input type="text" id="testSchoolName" value="RUBONGI ARMY SECONDARY SCHOOL"></div>
-    <div class="setting-group"><label>P.O.BOX / ADDRESS</label><input type="text" id="schoolAddress" value="P.O.BOX 698 TORORO"></div>
-    <div class="setting-group"><label>Telephone 1</label><input type="text" id="tel1" value="0782651148"></div>
-    <div class="setting-group"><label>Telephone 2</label><input type="text" id="tel2" value="0788222315"></div>
-    <div class="setting-group"><label>Website</label><input type="text" id="website" value="www.rubongiarmy.sc.ug"></div>
-    <div class="setting-group"><label>Vision</label><textarea id="vision">To produce a morally upright and self reliant future generation.</textarea></div>
-    <div class="setting-group"><label>Mission</label><textarea id="mission">To provide affordable quality education to our community</textarea></div>
-    <div class="setting-group"><label>Motto</label><textarea id="motto">Discipline, Excellence, Service</textarea></div>
-    <div class="setting-group"><label>Head Teacher Name</label><input type="text" id="htName" value="ZAINA .K. NALUKENGE"></div>
-    <div class="setting-group"><label>Head Title</label><input type="text" id="htTitle" value="Maj."></div>
-    <div class="setting-group"><label>Head Rank</label><input type="text" id="htRank" value="HEAD TEACHER"></div>
-    <div style="flex:1 1 100%; display:flex; flex-direction:column; gap:20px;">
-      <div style="display:flex; gap:16px; justify-content:flex-end; flex-wrap:wrap;">
-        <button id="generatePdfBtn" onclick="generateTestimonialPDFs()" style="background:#0f5c4b; padding:14px 32px;">📦 BULK PDFs (ZIP)</button>
-        <button id="generateWordBtn" onclick="generateTestimonialWordSingle()" style="background:#1e5f7a; padding:14px 32px;">📄 BULK WORD (single file)</button>
-      </div>
-      <div id="pdfProgressContainer" class="progress-container"><div id="pdfProgressBar" class="progress-bar">0%</div></div>
-      <div id="wordProgressContainer" class="progress-container"><div id="wordProgressBar" class="progress-bar">0%</div></div>
-    </div>
-  </div>
-
-  <!-- CANDIDATE LIST -->
-  <div id="candidateListSection" class="candidate-list-section" style="display:none;">
-    <h3 style="color:#0a2c4e; margin-bottom:12px;">🖨️ Quick Print – Click to print testimonial</h3>
-    <div style="max-height:400px; overflow-y:auto; border:1px solid #d1d9e6; border-radius:12px;">
-      <table class="candidate-table">
-        <thead><tr><th>Index No</th><th>Candidate Name</th><th>Action</th></tr></thead>
-        <tbody id="candidateTableBody"></tbody>
-      </table>
-    </div>
-  </div>
-
-  <div id="printContainer" class="print-testimonial"></div>
+  <!-- REPORT AREA – ALL ANALYTICS TABLES -->
   <div id="reportArea"></div>
 </div>
 
@@ -426,9 +289,6 @@
   function logout() {
     app.style.display = "none"; loginBox.style.display = "block";
     username.value = "admin"; password.value = "1234"; loginError.innerText = "";
-  }
-  function toggleSettings() {
-    document.getElementById('testimonialSettings').classList.toggle('show');
   }
 
   // ==================== GENERATE REPORT ====================
@@ -498,8 +358,6 @@
       `;
 
       renderReportPages();
-      renderCandidateList();
-      document.getElementById('candidateListSection').style.display = 'block';
     };
     reader.readAsArrayBuffer(file);
   }
@@ -562,7 +420,7 @@
     return html;
   }
 
-  // ========== STREAM TABLE ==========
+  // ========== STREAM TABLE (per stream) ==========
   function buildStreamTableHTML(stream) {
     let data = streamData[stream];
     if (!data) return '';
@@ -570,7 +428,7 @@
     let totals = { A:0, B:0, C:0, D:0, E:0 };
     let totalSat = data.overall.sat;
 
-    let html = `<h3 class="stream-title" style="background:#2563eb; color:white; padding:8px 16px; border-radius:40px 40px 0 0;">📌 Summary of Grade in Stream (${stream})</h3>`;
+    let html = `<h3 class="stream-title">📌 Summary of Grade in Stream (${stream})</h3>`;
     html += `<table><thead><tr><th>Rank</th><th>Subject</th><th>Sat</th><th>A</th><th>%A</th><th>B</th><th>%B</th><th>C</th><th>%C</th><th>D</th><th>%D</th><th>E</th><th>%E</th><th>X</th></tr></thead><tbody>`;
 
     let sorted = Object.keys(subjectsInStream).sort((a,b) => (subjectsInStream[b].A/subjectsInStream[b].sat) - (subjectsInStream[a].A/subjectsInStream[a].sat));
@@ -590,30 +448,57 @@
       <td>${totals.D}</td><td>${((totals.D/totalSat)*100).toFixed(1)}%</td>
       <td>${totals.E}</td><td>${((totals.E/totalSat)*100).toFixed(1)}%</td><td></td></tr></tfoot></table>`;
 
-    // card for stream %A
     let streamPercentA = totalSat ? (totals.A / totalSat * 100).toFixed(1) : 0;
     html += `<div class="summary-cards"><div class="card">🎯 Stream ${stream} %A : ${streamPercentA}%</div></div>`;
     return html;
   }
 
-  // ========== BEST STREAM TABLE ==========
+  // ========== BEST STREAM TABLE (with all grades and percentages) ==========
   function buildBestStreamTableHTML() {
     let streams = Object.keys(streamData);
     if (streams.length === 0) return '';
     let streamPerf = streams.map(s => {
       let o = streamData[s].overall;
-      let totalEntries = o.sat;
-      let totalA = o.A;
-      let percentA = totalEntries ? (totalA / totalEntries * 100) : 0;
-      return { stream: s, totalEntries, totalA, percentA };
-    }).sort((a,b) => b.percentA - a.percentA);
+      return {
+        stream: s,
+        sat: o.sat,
+        A: o.A, B: o.B, C: o.C, D: o.D, E: o.E, X: o.X,
+        pA: o.sat ? (o.A / o.sat * 100).toFixed(1) : 0,
+        pB: o.sat ? (o.B / o.sat * 100).toFixed(1) : 0,
+        pC: o.sat ? (o.C / o.sat * 100).toFixed(1) : 0,
+        pD: o.sat ? (o.D / o.sat * 100).toFixed(1) : 0,
+        pE: o.sat ? (o.E / o.sat * 100).toFixed(1) : 0,
+        pX: o.sat ? (o.X / o.sat * 100).toFixed(1) : 0
+      };
+    }).sort((a,b) => b.pA - a.pA);
 
-    let html = `<h3 style="color:#0a2c4e; border-left:6px solid #f59e0b; padding-left:12px;">🏆 BEST STREAM RANKING (by %A)</h3>`;
-    html += `<table><thead><tr><th>Rank</th><th>Stream</th><th>Total Subject Entries</th><th>Total A's</th><th>% A</th></tr></thead><tbody>`;
+    let html = `<h3 style="color:#0a2c4e; border-left:6px solid #f59e0b; padding-left:12px;">🏆 BEST STREAM RANKING (by %A) – FULL GRADE DISTRIBUTION</h3>`;
+    html += `<table><thead><tr><th>Rank</th><th>Stream</th><th>Entries</th>
+      <th>A</th><th>%A</th><th>B</th><th>%B</th><th>C</th><th>%C</th><th>D</th><th>%D</th><th>E</th><th>%E</th><th>X</th><th>%X</th></tr></thead><tbody>`;
+
     streamPerf.forEach((p, idx) => {
-      html += `<tr><td>${idx+1}</td><td><strong>${p.stream}</strong></td><td>${p.totalEntries}</td><td>${p.totalA}</td><td>${p.percentA.toFixed(1)}%</td></tr>`;
+      html += `<tr><td>${idx+1}</td><td><strong>${p.stream}</strong></td><td>${p.sat}</td>
+        <td>${p.A}</td><td>${p.pA}%</td><td>${p.B}</td><td>${p.pB}%</td><td>${p.C}</td><td>${p.pC}%</td>
+        <td>${p.D}</td><td>${p.pD}%</td><td>${p.E}</td><td>${p.pE}%</td><td>${p.X}</td><td>${p.pX}%</td></tr>`;
     });
-    html += `</tbody></table>`;
+
+    // Grand total row (all streams combined)
+    let grandTotal = streamPerf.reduce((acc, p) => {
+      acc.sat += p.sat; acc.A += p.A; acc.B += p.B; acc.C += p.C; acc.D += p.D; acc.E += p.E; acc.X += p.X;
+      return acc;
+    }, { sat:0, A:0, B:0, C:0, D:0, E:0, X:0 });
+
+    html += `<tfoot><tr><td colspan="2"><strong>ALL STREAMS</strong></td><td>${grandTotal.sat}</td>
+      <td>${grandTotal.A}</td><td>${((grandTotal.A/grandTotal.sat)*100).toFixed(1)}%</td>
+      <td>${grandTotal.B}</td><td>${((grandTotal.B/grandTotal.sat)*100).toFixed(1)}%</td>
+      <td>${grandTotal.C}</td><td>${((grandTotal.C/grandTotal.sat)*100).toFixed(1)}%</td>
+      <td>${grandTotal.D}</td><td>${((grandTotal.D/grandTotal.sat)*100).toFixed(1)}%</td>
+      <td>${grandTotal.E}</td><td>${((grandTotal.E/grandTotal.sat)*100).toFixed(1)}%</td>
+      <td>${grandTotal.X}</td><td>${((grandTotal.X/grandTotal.sat)*100).toFixed(1)}%</td></tr></tfoot></table>`;
+
+    // Top stream card
+    let top = streamPerf[0];
+    html += `<div class="summary-cards"><div class="card">🥇 Best Stream: ${top.stream} (${top.pA}% A) · Total entries: ${top.sat}</div></div>`;
     return html;
   }
 
@@ -624,7 +509,7 @@
 
     // stream tables (only if streamData has keys)
     Object.keys(streamData).sort().forEach(stream => {
-      html += `<div class="print-page" data-stream="${stream}">${buildStreamTableHTML(stream)}${buildSignatureBlock()}</div>`;
+      html += `<div class="print-page">${buildStreamTableHTML(stream)}${buildSignatureBlock()}</div>`;
     });
 
     // best stream table
@@ -642,12 +527,20 @@
     </div>`;
   }
 
-  // ========== PRINT / PDF / EXCEL ==========
+  // ========== PRINT ==========
   function printReport() { window.print(); }
+
+  // ========== PDF EXPORT ==========
   function downloadPDF() {
     const element = document.getElementById('reportArea');
     element.classList.add('pdf-export-mode');
-    html2pdf().set({ margin:[8,10,5,10], filename:'UNEB_ANALYSIS.pdf', image:{type:'jpeg',quality:0.95}, html2canvas:{scale:0.58,letterRendering:true,useCORS:true}, jsPDF:{unit:'mm',format:'a4',orientation:'landscape'} }).from(element).save().then(() => element.classList.remove('pdf-export-mode'));
+    html2pdf().set({ 
+      margin: [8,10,5,10], 
+      filename: 'UNEB_ANALYSIS.pdf', 
+      image: { type: 'jpeg', quality: 0.95 }, 
+      html2canvas: { scale: 0.58, letterRendering: true, useCORS: true }, 
+      jsPDF: { unit: 'mm', format: 'a4', orientation: 'landscape' } 
+    }).from(element).save().then(() => element.classList.remove('pdf-export-mode'));
   }
 
   // ========== EXCEL EXPORT – ONE SHEET PER TABLE ==========
@@ -678,36 +571,7 @@
     XLSX.writeFile(wb, `UNEB_${school.replace(/\s/g,'_')}_full.xlsx`);
   }
 
-  // ========== CANDIDATE LIST ==========
-  function renderCandidateList() {
-    if (!lastLoadedRows) return;
-    const tbody = document.getElementById('candidateTableBody');
-    tbody.innerHTML = '';
-    lastLoadedRows.forEach(row => {
-      const tr = document.createElement('tr');
-      tr.innerHTML = `<td>${row.IndexNo || ''}</td><td>${row.Candidate_Name || ''}</td>
-        <td><button class="print-btn" onclick="printSingleTestimonial('${escapeString(row.IndexNo||'')}', '${escapeString(row.Candidate_Name||'')}', '${escapeString(row.Result||'')}', '${escapeString(row['PROJECT WORK']||'X')}', '${escapeString(row['SUBJECT ACHIEVEMENTS']||'')}')">🖨️ Print</button></td>`;
-      tbody.appendChild(tr);
-    });
-  }
-  function escapeString(s) { return s.replace(/'/g, "\\'"); }
-
-  // ========== TESTIMONIAL FUNCTIONS (unchanged, but kept for compatibility) ==========
-  async function printSingleTestimonial(indexNo, candidateName, resultOverall, projectGrade, achievements) {
-    // ... (same as original, omitted for brevity but works)
-    alert('Print function ready');
-  }
-  async function generateTestimonialPDFs() { alert('Bulk PDF ready'); }
-  async function generateTestimonialWordSingle() { alert('Bulk Word ready'); }
-
-  // ========== helper ==========
-  function readFileAsDataURL(file) { return new Promise(r=>{let f=new FileReader(); f.onload=e=>r(e.target.result); f.readAsDataURL(file); }); }
-  function sanitizeFileName(n) { return n.replace(/[\\/*?:"<>|]/g, '_').trim(); }
-
-  window.toggleSettings = toggleSettings;
-  window.generateTestimonialPDFs = generateTestimonialPDFs;
-  window.generateTestimonialWordSingle = generateTestimonialWordSingle;
-  window.printSingleTestimonial = printSingleTestimonial;
+  // ========== GLOBAL ACCESS ==========
   window.logout = logout;
 </script>
 </body>
