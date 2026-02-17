@@ -149,23 +149,70 @@
     }
     .action-bar button:hover { background:#15306b; transform:translateY(-2px); }
     .logout-btn { background:#6b2e1e !important; }
+    
+    /* Settings panel */
+    .settings-toggle {
+      background: #f0f4fa;
+      border-radius: 20px;
+      padding: 8px 20px;
+      margin-bottom: 16px;
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      gap: 16px;
+    }
+    .settings-panel {
+      background: white;
+      border-radius: 20px;
+      padding: 20px 24px;
+      margin-bottom: 24px;
+      display: none;
+      flex-wrap: wrap;
+      gap: 20px;
+      border: 1px solid #d4e0ec;
+      box-shadow: 0 6px 12px rgba(0,0,0,0.02);
+    }
+    .settings-panel.show { display: flex; }
+    .setting-group {
+      flex: 1 1 200px;
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+    .setting-group label {
+      font-size: 0.85rem;
+      font-weight: 600;
+      color: #1e3a5f;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+    .setting-group input, .setting-group textarea {
+      padding: 10px 14px;
+      border-radius: 16px;
+      border: 1px solid #cbd5e1;
+      font-size: 0.9rem;
+      width: 100%;
+    }
+    .setting-group textarea { min-height: 60px; resize: vertical; }
 
     /* ========== ANALYTICS TABLES – PROFESSIONAL STYLE ========== */
     .print-page {
       background: white;
-      padding: 10px 15px;  /* reduced padding to maximize space */
+      padding: 8px 15px 12px 15px;  /* balanced padding to avoid cut-off */
       border-radius: 24px;
       box-shadow: 0 20px 30px -8px rgba(0,20,50,0.15);
       margin-bottom: 20px;
       display: flex;
       flex-direction: column;
       page-break-inside: avoid;
+      box-sizing: border-box;
+      width: 100%;
     }
     table {
       width: 100%;
       border-collapse: collapse;
-      font-size: 11px;      /* slightly smaller for landscape fit */
-      margin: 10px 0;
+      font-size: 10.5px;      /* slightly smaller for safety */
+      margin: 8px 0;
       border: 1px solid #9bb0cc;
       box-shadow: 0 2px 6px rgba(0,0,0,0.03);
     }
@@ -173,16 +220,16 @@
       background: #0a2c4e;
       color: white;
       font-weight: 600;
-      padding: 8px 3px;
+      padding: 6px 2px;
       text-transform: uppercase;
-      letter-spacing: 0.3px;
-      font-size: 10px;
+      letter-spacing: 0.2px;
+      font-size: 9px;
       text-align: center;
       vertical-align: middle;
       border: 1px solid #9bb0cc;
     }
     td {
-      padding: 5px 3px;
+      padding: 4px 2px;
       border: 1px solid #b0c4de;
       text-align: center;
       vertical-align: middle;
@@ -195,9 +242,9 @@
     }
     .project-row { background: #e6f0ff !important; font-weight:600; }
     .signature-block {
-      margin-top: 15px;
+      margin-top: 12px;
       border-top: 2px dashed #9bb0cc;
-      padding-top: 12px;
+      padding-top: 10px;
       display: flex;
       flex-wrap: wrap;
       justify-content: space-between;
@@ -205,38 +252,65 @@
       font-size: 10px;
       color: #1e3a5f;
     }
+    .signature-left {
+      flex: 1;
+      text-align: left;
+    }
+    .signature-right {
+      flex: 1;
+      text-align: right;
+      font-weight: 500;
+    }
+    .signature-line {
+      margin: 3px 0;
+    }
     .summary-cards {
       display: flex;
-      gap: 20px;
+      gap: 16px;
       justify-content: flex-start;
       margin: 5px 0 0;
     }
     .card {
       background: linear-gradient(135deg, #eef4ff, #e6f0fc);
-      padding: 8px 20px;
+      padding: 6px 18px;
       border-radius: 40px;
-      font-size: 0.9rem;
+      font-size: 0.85rem;
       font-weight: 600;
       color: #0a2c4e;
       border: 1px solid white;
     }
     .stream-title {
-      background: #2563eb; color: white; padding: 6px 14px; border-radius: 30px 30px 0 0; margin: 0; font-size: 1.2rem;
+      background: #2563eb; 
+      color: white; 
+      padding: 5px 12px; 
+      border-radius: 30px 30px 0 0; 
+      margin: 0; 
+      font-size: 1.1rem;
+      display: inline-block;
     }
 
-    /* print landscape – high resolution */
+    /* print landscape – high resolution, no cutting */
     @media print {
       body * { visibility: hidden; }
       #schoolHeaderContainer, #reportArea, #schoolHeaderContainer *, #reportArea * { visibility: visible; }
-      #schoolHeaderContainer, #reportArea { position: absolute; left: 0; top: 0; width: 100%; background: white; }
-      @page { size: A4 landscape; margin: 8mm 8mm 5mm 8mm; }
+      #schoolHeaderContainer, #reportArea { 
+        position: absolute; 
+        left: 0; 
+        top: 0; 
+        width: 100%; 
+        background: white; 
+      }
+      @page { 
+        size: A4 landscape; 
+        margin: 8mm 8mm 5mm 8mm;  
+      }
       .print-page {
         page-break-after: always;
         box-shadow: none;
         border-radius: 0;
         padding: 2mm 3mm;
         margin: 0;
-        min-height: 100%;
+        min-height: auto;
       }
       .print-page:last-child { page-break-after: avoid; }
       table { font-size: 9pt; border: 1px solid #333; }
@@ -273,6 +347,38 @@
     <button class="logout-btn" onclick="logout()"><span>🚪</span> LOGOUT</button>
   </div>
 
+  <!-- Signature Settings Toggle -->
+  <div class="settings-toggle">
+    <span style="font-weight:600;">✍️ SIGNATURE SETTINGS</span>
+    <button onclick="toggleSignatureSettings()" style="background:#2d5a7a;">⚙️ Configure</button>
+  </div>
+  <div id="signatureSettings" class="settings-panel">
+    <div class="setting-group">
+      <label>Signatory Name</label>
+      <input type="text" id="signatoryName" value="MAWERERE FRANCIS">
+    </div>
+    <div class="setting-group">
+      <label>Title / Role</label>
+      <input type="text" id="signatoryTitle" value="Data In charge">
+    </div>
+    <div class="setting-group">
+      <label>Telephone</label>
+      <input type="text" id="signatoryPhone" value="0788222315">
+    </div>
+    <div class="setting-group">
+      <label>Email</label>
+      <input type="text" id="signatoryEmail" value="mawererefrancis@gmail.com">
+    </div>
+    <div class="setting-group">
+      <label>Signature Label</label>
+      <input type="text" id="signatureLabel" value="Signature:">
+    </div>
+    <div class="setting-group">
+      <label>Extra Info (optional)</label>
+      <textarea id="extraSignatureInfo"></textarea>
+    </div>
+  </div>
+
   <!-- REPORT AREA – ALL ANALYTICS TABLES -->
   <div id="reportArea"></div>
 </div>
@@ -282,6 +388,7 @@
   let subjects = {}; let gender = {}; let projectTotals = { PA:0, PB:0, PC:0, PD:0, PE:0, PX:0 };
   let lastLoadedRows = null;
   let streamData = {}; // per stream subject aggregates
+  let streamProjectTotals = {}; // per stream project work aggregates
 
   // ==================== LOGIN / LOGOUT ====================
   function login() {
@@ -295,6 +402,9 @@
   function logout() {
     app.style.display = "none"; loginBox.style.display = "block";
     username.value = "admin"; password.value = "1234"; loginError.innerText = "";
+  }
+  function toggleSignatureSettings() {
+    document.getElementById('signatureSettings').classList.toggle('show');
   }
 
   // ==================== GENERATE REPORT ====================
@@ -311,6 +421,7 @@
       // reset aggregates
       subjects = {}; gender = {}; projectTotals = { PA:0, PB:0, PC:0, PD:0, PE:0, PX:0 };
       streamData = {};
+      streamProjectTotals = {};
 
       const validGrades = ['A','B','C','D','E','X'];
 
@@ -352,6 +463,14 @@
             streamData[stream].overall[g]++;
           }
         });
+
+        // Stream project work totals
+        if (stream) {
+          if (!streamProjectTotals[stream]) {
+            streamProjectTotals[stream] = { PA:0, PB:0, PC:0, PD:0, PE:0, PX:0 };
+          }
+          streamProjectTotals[stream]['P' + pg]++;
+        }
       });
 
       // Update header
@@ -426,7 +545,7 @@
     return html;
   }
 
-  // ========== STREAM TABLE (per stream) ==========
+  // ========== STREAM TABLE (per stream) with PROJECT WORK ==========
   function buildStreamTableHTML(stream) {
     let data = streamData[stream];
     if (!data) return '';
@@ -446,6 +565,12 @@
         <td>${x.A}</td><td>${p('A')}%</td><td>${x.B}</td><td>${p('B')}%</td><td>${x.C}</td><td>${p('C')}%</td>
         <td>${x.D}</td><td>${p('D')}%</td><td>${x.E}</td><td>${p('E')}%</td><td>${x.X}</td></tr>`;
     });
+
+    // Add project work row for this stream
+    let proj = streamProjectTotals[stream] || { PA:0, PB:0, PC:0, PD:0, PE:0, PX:0 };
+    html += `<tr class="project-row"><td></td><td>📌 PROJECT WORK</td><td></td>
+      <td>${proj.PA}</td><td></td><td>${proj.PB}</td><td></td><td>${proj.PC}</td><td></td>
+      <td>${proj.PD}</td><td></td><td>${proj.PE}</td><td></td><td>${proj.PX}</td></tr>`;
 
     html += `<tfoot><tr><td></td><td><strong>STREAM TOTAL (A–E)</strong></td><td></td>
       <td>${totals.A}</td><td>${((totals.A/totalSat)*100).toFixed(1)}%</td>
@@ -526,39 +651,78 @@
     document.getElementById('reportArea').innerHTML = html;
   }
 
+  // ========== BUILD SIGNATURE BLOCK – DYNAMIC FROM SETTINGS ==========
   function buildSignatureBlock() {
+    const signatoryName = document.getElementById('signatoryName').value || 'MAWERERE FRANCIS';
+    const signatoryTitle = document.getElementById('signatoryTitle').value || 'Data In charge';
+    const signatoryPhone = document.getElementById('signatoryPhone').value || '0788222315';
+    const signatoryEmail = document.getElementById('signatoryEmail').value || 'mawererefrancis@gmail.com';
+    const signatureLabel = document.getElementById('signatureLabel').value || 'Signature:';
+    const extraInfo = document.getElementById('extraSignatureInfo').value;
+
+    let extraHtml = extraInfo ? `<div class="signature-line">${extraInfo}</div>` : '';
+
     return `<div class="signature-block">
-      <div class="signature-line"><span style="font-weight:700;">Signature:</span> ___________________________________<br><span style="font-size:10px;">Mawerere Francis · Data In charge</span></div>
-      <div class="signature-contact">📞 0788222315 &nbsp; ✉️ mawererefrancis@gmail.com</div>
+      <div class="signature-left">
+        <div class="signature-line"><span style="font-weight:700;">${signatureLabel}</span> ___________________________________</div>
+        <div class="signature-line"><strong>${signatoryName}</strong> · ${signatoryTitle}</div>
+        ${extraHtml}
+      </div>
+      <div class="signature-right">
+        <div>📞 ${signatoryPhone}</div>
+        <div>✉️ ${signatoryEmail}</div>
+      </div>
     </div>`;
   }
 
   // ========== PRINT ==========
   function printReport() { window.print(); }
 
-  // ========== PDF EXPORT – HIGH RESOLUTION, LANDSCAPE FIT ==========
+  // ========== PDF EXPORT – HIGH RESOLUTION, NO CUTTING ==========
   function downloadPDF() {
     const element = document.getElementById('reportArea');
     element.classList.add('pdf-export-mode');
-    // Increase scale to 1.2 for better resolution, adjust margins to fit A4 landscape
+    
+    // Temporarily adjust styles for PDF generation to ensure no clipping
+    const printPages = document.querySelectorAll('.print-page');
+    printPages.forEach(page => {
+      page.style.padding = '3mm 5mm';
+      page.style.margin = '0';
+    });
+
     html2pdf().set({
-      margin: [5, 5, 5, 5],        // small margins (mm)
+      margin: [8, 8, 8, 8],        // balanced margins (mm)
       filename: 'UNEB_ANALYSIS.pdf',
-      image: { type: 'jpeg', quality: 1.0 },
+      image: { type: 'jpeg', quality: 0.98 },
       html2canvas: { 
-        scale: 1.5,                // higher scale = sharper text
+        scale: 1.3,                // sharp but safe
         letterRendering: true,
         useCORS: true,
         logging: false,
         dpi: 300,
-        windowWidth: 1200           // helps with layout consistency
+        windowWidth: 1200,
+        onclone: (clonedDoc) => {
+          // Further adjust cloned document if needed
+          const pages = clonedDoc.querySelectorAll('.print-page');
+          pages.forEach(p => {
+            p.style.padding = '3mm 5mm';
+            p.style.boxSizing = 'border-box';
+          });
+        }
       },
       jsPDF: {
         unit: 'mm',
         format: 'a4',
         orientation: 'landscape'
       }
-    }).from(element).save().then(() => element.classList.remove('pdf-export-mode'));
+    }).from(element).save().then(() => {
+      // Restore original styles
+      printPages.forEach(page => {
+        page.style.padding = '';
+        page.style.margin = '';
+      });
+      element.classList.remove('pdf-export-mode');
+    });
   }
 
   // ========== EXCEL EXPORT – ONE SHEET PER TABLE ==========
@@ -574,14 +738,13 @@
         else if (text.includes('GENDER DISTRIBUTION')) sheetName = 'Gender Summary';
         else if (text.includes('Summary of Grade in Stream')) {
           let match = text.match(/\(([^)]+)\)/);
-          sheetName = match ? match[1] : 'Stream';
+          sheetName = match ? match[1].substring(0,20) : 'Stream';
         }
         else if (text.includes('BEST STREAM')) sheetName = 'Best Stream';
         else sheetName = text.substring(0,20).replace(/[^\w]/g,'_');
       }
       const tbl = page.querySelector('table');
       if (tbl) {
-        // Use table_to_sheet to preserve all cell content (including % signs)
         let ws = XLSX.utils.table_to_sheet(tbl);
         XLSX.utils.book_append_sheet(wb, ws, sheetName);
       }
